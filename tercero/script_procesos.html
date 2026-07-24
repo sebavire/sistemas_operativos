@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad complementaria: Procesos y mejora del diagnóstico</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 30px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        .box {
+            background: #eef2f7;
+            border-left: 6px solid #1e5a7a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+        .box code {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 6px solid #28a745;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        ul, ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+        }
+        .comando {
+            background: #1e2a3a;
+            color: #4a90d9;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .extra {
+            background: #e8f0fe;
+            border-left: 6px solid #0b3b5c;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .recordatorio {
+            background: #eef2f7;
+            border: 1px solid #0b3b5c;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1e5a7a;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🧩 Actividad: Procesos</h1>
+
+    <p><strong>Objetivo:</strong> Crear un nuevo script que muestre los procesos más exigentes del servidor.</p>
+
+    <hr>
+
+    <h2>📌 Recordatorio de comandos</h2>
+
+    <div class="recordatorio">
+        <p><strong>Conectarse al servidor:</strong></p>
+        <div class="comando">ssh usuario@192.168.2.245</div>
+
+        <p><strong>Subir un archivo a tu carpeta web:</strong></p>
+        <div class="comando">scp archivo.sh usuario@192.168.2.245:/var/www/html/usuario/</div>
+
+        <p><strong>Dar permisos de ejecución a un script:</strong></p>
+        <div class="comando">chmod 755 /var/www/html/usuario/archivo.sh</div>
+
+        <p><strong>Ejecutar un script y guardar su salida en un archivo:</strong></p>
+        <div class="comando">/var/www/html/usuario/archivo.sh &gt; /var/www/html/usuario/archivo.txt</div>
+    </div>
+
+    <hr>
+
+    <h2>📋 PARTE 1: Script de procesos</h2>
+
+    <p>Crea un script llamado <strong><code>procesos.sh</code></strong> que muestre los procesos que más CPU están usando en el servidor.</p>
+
+    <p><strong>Ejemplo del comienzo del script:</strong></p>
+    <div class="box">
+        <code>#!/bin/bash<br>
+        echo "=== TOP 5 PROCESOS POR CONSUMO DE CPU ==="<br>
+        echo ""</code>
+    </div>
+
+    <p>Luego, el script debe ejecutar los siguientes comandos:</p>
+    <ul>
+        <li><code>ps aux --sort=-%cpu | head -6</code> → lista los 5 procesos que más CPU usan (el <code>head -6</code> incluye la cabecera y los 5 procesos).</li>
+        <li><code>ps aux --sort=-%mem | head -6</code> → lista los 5 procesos que más memoria RAM usan.</li>
+    </ul>
+
+    <p><strong>La salida del script debe guardarse en un archivo llamado <code>procesos.txt</code></strong> dentro de tu carpeta web.</p>
+
+    <hr>
+
+    <h2>📤 Subir el script y probarlo</h2>
+
+    <ol>
+        <li>Sube el script al servidor con <code>scp</code>.</li>
+        <li>Dale permisos de ejecución con <code>chmod 755</code>.</li>
+        <li>Ejecutalo y guarda la salida en <code>procesos.txt</code>.</li>
+        <li>Verifica desde el navegador que el archivo se creó:</li>
+    </ol>
+    <div class="comando">
+        http://192.168.2.245/usuario/procesos.txt
+    </div>
+
+    <hr>
+
+    <h2>📋 PARTE 2: Mejorar el script de diagnóstico</h2>
+
+    <p>Agregaremos más información al script de diagnóstico (<code>diagnostico.sh</code>).</p>
+
+    <p>Incluye:</p>
+    <ul>
+        <li>Un título que diga <strong>"Información del sistema"</strong> (usando <code>echo</code>).</li>
+        <li>El comando <code>uname -a</code> (muestra información del kernel y el sistema operativo).</li>
+        <li>El comando <code>whoami</code> (muestra el nombre del usuario actual).</li>
+    </ul>
+
+    <!-- <p><strong>Ubicación:</strong> Agregá esta sección al final del script.</p> -->
+
+    <!-- <div class="extra">
+        <p><strong>Pistas para escribir la nueva sección:</strong></p>
+        <ul>
+            <li>Usá <code>echo</code> para mostrar el título.</li>
+            <li>Usá <code>echo ""</code> para dejar una línea vacía antes del título.</li>
+            <li>Ejecutá <code>uname -a</code> y <code>whoami</code> (sin <code>echo</code>, directamente el comando).</li>
+        </ul>
+    </div> -->
+
+    <hr>
+
+    <h2>📤 Subir el script modificado y verificar</h2>
+
+    <ol>
+        <li>Modifica <code>diagnostico.sh</code> en tu computadora, y súbelo al servidor.</li>
+        <li>O Modificalo directamente en el servidor.</li>
+        <li>Espera 2 minutos (el tiempo de <code>cron</code>) y recarga el archivo <code>estado.txt</code> en el navegador.</li>
+    </ol>
+    <div class="comando">
+        http://192.168.2.245/usuario/estado.txt
+    </div>
+    <p>Deberías ver la nueva información al final del archivo.</p>
+
+    <hr>
+
+    <div class="extra">
+        <h2>🎯 Extra</h2>
+        <p><strong>Programa <code>procesos.sh</code> en <code>cron</code></strong> para que se actualice automáticamente.</p>
+        <p>Agregá una nueva línea en tu crontab:</p>
+        <div class="comando">*/5 * * * * /var/www/html/usuario/procesos.sh &gt; /var/www/html/usuario/procesos.txt</div>
+        <p>Espera 5 minutos y verifica que <code>procesos.txt</code> se actualiza.</p>
+    </div>
+
+    <hr>
+
+    <h2>📌 Resumen de comandos nuevos</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Comando</th>
+                <th>¿Qué hace?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>ps aux --sort=-%cpu | head -6</code></td>
+                <td>Lista los 5 procesos que más CPU usan</td>
+            </tr>
+            <tr>
+                <td><code>ps aux --sort=-%mem | head -6</code></td>
+                <td>Lista los 5 procesos que más memoria usan</td>
+            </tr>
+            <tr>
+                <td><code>uname -a</code></td>
+                <td>Muestra información del sistema operativo y el kernel</td>
+            </tr>
+            <tr>
+                <td><code>whoami</code></td>
+                <td>Muestra el nombre del usuario actual</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- <p style="text-align: center; margin-top: 30px; padding: 20px; background: #eef2f7; border-radius: 12px;">
+        <strong>✅ ¡Actividad completada!</strong><br>
+        Ahora tienes un script que muestra los procesos más exigentes del servidor y un diagnóstico más completo.
+    </p> -->
+
+</div>
+</body>
+</html>
