@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Actividad: Menú de herramientas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .card {
+            max-width: 950px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b3b5c;
+            border-bottom: 4px solid #2563eb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+        p, li {
+            color: #1e293b;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        ul, ol {
+            padding-left: 1.6rem;
+            margin: 0.6rem 0 1rem 0;
+        }
+        li {
+            margin-bottom: 0.3rem;
+        }
+        .info-box {
+            background: #eef2ff;
+            border-left: 6px solid #2563eb;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 1.2rem 0;
+        }
+        .info-box strong {
+            color: #1e3a8a;
+        }
+        .entregable {
+            background: #fef9e7;
+            border: 1px solid #facc15;
+            border-radius: 14px;
+            padding: 1.2rem 1.8rem;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+        .entregable h3 {
+            margin-top: 0;
+            color: #854d0e;
+        }
+        .ejemplo-box {
+            background: #f1f5f9;
+            border-radius: 14px;
+            padding: 1rem 1.8rem;
+            margin: 1.2rem 0;
+            border: 1px solid #d1d9e6;
+        }
+        .ejemplo-box code {
+            background: #e2e8f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            color: #0b3b5c;
+            font-size: 0.9rem;
+        }
+        .ejemplo-box pre {
+            background: #0b3b5c;
+            color: #e2e8f0;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            margin: 0.8rem 0;
+        }
+        .ejemplo-box pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+            font-weight: normal;
+        }
+        .extra-box {
+            background: #fef2f2;
+            border-left: 6px solid #dc2626;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .extra-box h2 {
+            margin-top: 0;
+            color: #991b1b;
+        }
+        .separador {
+            border: none;
+            border-top: 3px dashed #cbd5e1;
+            margin: 2rem 0 1.5rem 0;
+        }
+        .terminal {
+            background: #0b3b5c;
+            color: #e2e8f0;
+            border-radius: 14px;
+            padding: 1.5rem 2rem;
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.95rem;
+            margin: 1.2rem 0;
+            border: 1px solid #1e3a5f;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .terminal .prompt {
+            color: #93c5fd;
+        }
+        .terminal .opcion {
+            color: #fbbf24;
+        }
+        .terminal .comentario {
+            color: #6b7280;
+            font-style: italic;
+        }
+        .terminal .salida {
+            color: #d1d5db;
+        }
+        .comandos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem 1.5rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin: 1.2rem 0;
+        }
+        .comando-item {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            font-size: 0.95rem;
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+        }
+        .comando-item .cmd {
+            background: #e2e8f0;
+            padding: 0.1rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 500;
+            color: #0b3b5c;
+        }
+        .comando-item .desc {
+            color: #334155;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 400;
+        }
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+            }
+            .comandos-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem 1.2rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .terminal {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+
+        <h1>🧩 Actividad: Menú de herramientas</h1>
+
+        <p><strong>Objetivo:</strong> Crear un script con un menú interactivo que permita ejecutar tres herramientas útiles en el servidor.</p>
+
+        <!-- ========== CONSIGNA ========== -->
+        <h2>📌 Consigna</h2>
+
+        <p>Crea un script llamado <code>menu_herramientas.sh</code> que muestre un menú con las siguientes opciones:</p>
+
+        <!-- Menú en formato terminal -->
+        <div class="terminal">
+            <!-- <div><span class="prompt">$</span> ./menu_herramientas.sh</div> -->
+            <!-- <br /> -->
+            <div><span class="comentario"># Menú de herramientas</span></div>
+            <div><span class="opcion">1.</span> Inventario del servidor</div>
+            <div><span class="opcion">2.</span> Saludo</div>
+            <div><span class="opcion">3.</span> Creador de carpetas</div>
+            <div><span class="opcion">4.</span> Salir</div>
+            <!-- <br /> -->
+            <div><span class="prompt">Elige una opción:</span></div>
+        </div>
+
+            <!-- <div class="info-box">
+                <strong>💡 Importante:</strong> El menú debe usar <code>case</code> para elegir la opción.
+            </div> -->
+
+        <h3>📋 ¿Qué debe hacer cada opción?</h3>
+
+        <ul>
+            <li><strong>Opción 1 – Inventario:</strong> Muestra la fecha, el nombre del servidor, los usuarios conectados y el espacio libre en disco.</li>
+            <li><strong>Opción 2 – Saludo:</strong> Pregunta tu nombre y muestra un saludo personalizado con la fecha y hora actual.</li>
+            <li><strong>Opción 3 – Creador de carpetas:</strong> Crea una carpeta llamada <code>actividad</code> y dentro: <code>docs</code>, <code>scripts</code> y <code>backup</code>.</li>
+            <li><strong>Opción 4 – Salir:</strong> Muestra un mensaje de despedida y termina el script.</li>
+        </ul>
+
+        <!-- ========== REQUISITOS ========== -->
+        <!-- <h2>📋 Requisitos obligatorios</h2>
+
+        <ul>
+            <li>El script debe tener comentarios (líneas que empiezan con <code>#</code>).</li>
+            <li>El script debe ser ejecutable (<code>chmod +x</code>).</li>
+            <li>El menú debe usar <code>case</code> para elegir la opción.</li>
+            <li>Cada opción debe mostrar mensajes claros para el usuario.</li>
+        </ul> -->
+
+        <!-- ========== EXTRA ========== -->
+        <div class="extra-box">
+            <h2>⭐ Parte Extra (opcional)</h2>
+            <p><strong>Agrega un bucle <code>while</code> para que el menú se repita hasta que el usuario elija la opción "Salir".</strong></p>
+        </div>
+
+        <!-- ========== EJEMPLOS ========== -->
+        <h2>🧪 Ejemplos</h2>
+
+        <!-- <p>Estos ejemplos te muestran cómo usar las estructuras que necesitas para resolver el trabajo práctico.</p> -->
+
+        <!-- Ejemplo 1: read -->
+        <div class="ejemplo-box">
+            <h3>📌 Leer una variable con <code>read</code></h3>
+            <p>Para preguntar algo al usuario y guardar su respuesta:</p>
+            <pre><code>read -p "¿Qué día es hoy?: " dia
+echo "Hoy es $dia"</code></pre>
+        </div>
+
+        <!-- Ejemplo 2: case con múltiples comandos (explicación clara) -->
+        <div class="ejemplo-box">
+            <h3>📌 Menú con <code>case</code></h3>
+            <p>El <code>case</code> permite ejecutar diferentes comandos según la opción que elija el usuario.</p>
+            
+            <p><strong>Estructura básica:</strong></p>
+            <pre><code>case $opcion in
+    1) 
+        echo "Has elegido la opción 1"
+        date
+        ;;
+    2) 
+        echo "Has elegido la opción 2"
+        whoami
+        ;;
+    *) 
+        echo "Opción inválida" 
+        ;;
+esac</code></pre>
+
+            <p><strong>¿Cómo funciona?</strong></p>
+            <ul>
+                <li>Si el usuario elige <code>1</code>, se ejecutan <strong>todos</strong> los comandos que están entre <code>1)</code> y <code>;;</code>.</li>
+                <li>Si elige <code>2</code>, se ejecutan los comandos entre <code>2)</code> y <code>;;</code>.</li>
+                <!-- <li>El <code>*)</code> es como un "comodín": se ejecuta si el usuario elige cualquier otra opción no contemplada.</li> -->
+                <li>El <code>*)</code> se ejecuta si el usuario elige cualquier otra opción no contemplada.</li>
+            </ul>
+
+            <p><strong>Un ejemplo:</strong></p>
+            <pre><code>echo "1. Ver fecha"
+echo "2. Ver quién soy"
+read -p "Elige una opción: " opcion
+
+case $opcion in
+    1) 
+        echo "La fecha actual es:"
+        date
+        ;;
+    2) 
+        echo "Tu nombre de usuario es:"
+        whoami
+        ;;
+    *) 
+        echo "Opción no válida. Elige 1 o 2." 
+        ;;
+esac</code></pre>
+        </div>
+
+        <!-- Ejemplo 3: while (extra) -->
+        <div class="ejemplo-box">
+            <h3>📌 Bucle <code>while</code> (para la parte extra)</h3>
+            <p>Para repetir el menú hasta que el usuario elija salir:</p>
+            <pre><code>opcion=0
+while [ $opcion -ne 3 ]; do
+    echo "1. Ver fecha"
+    echo "2. Ver quién soy"
+    echo "3. Salir"
+    read -p "Elige una opción: " opcion
+
+    case $opcion in
+        1) date ;;
+        2) whoami ;;
+        3) echo "¡Hasta luego!" ;;
+        *) echo "Opción no válida" ;;
+    esac
+done</code></pre>
+        </div>
+
+        <!-- Ejemplo 4: if-else -->
+        <!-- <div class="ejemplo-box">
+            <h3>📌 Estructura <code>if-else</code></h3>
+            <p>Para tomar decisiones en el script:</p>
+            <pre><code>if [ condición ]; then
+    echo "Se cumple la condición"
+else
+    echo "No se cumple la condición"
+fi</code></pre>
+            <p><strong>Ejemplo:</strong></p>
+            <pre><code>read -p "¿Tenés más de 18 años? (s/n) " respuesta
+if [ "$respuesta" = "s" ]; then
+    echo "Podés pasar"
+else
+    echo "No podés pasar"
+fi</code></pre>
+        </div> -->
+
+        <!-- ========== COMANDOS ÚTILES ========== -->
+        <h2>📋 Comandos útiles para las opciones</h2>
+
+        <div class="comandos-grid">
+            <div class="comando-item">
+                <span class="cmd">date</span>
+                <span class="desc">→ muestra la fecha y hora</span>
+            </div>
+            <div class="comando-item">
+                <span class="cmd">hostname</span>
+                <span class="desc">→ muestra el nombre del servidor</span>
+            </div>
+            <div class="comando-item">
+                <span class="cmd">who</span>
+                <span class="desc">→ muestra los usuarios conectados</span>
+            </div>
+             <div class="comando-item">
+                <span class="cmd">who | wc -l</span>
+                <span class="desc">→ cuenta los usuarios conectados</span>
+            </div>
+            <div class="comando-item">
+                <span class="cmd">df -h /</span>
+                <span class="desc">→ muestra el espacio libre en disco</span>
+            </div>
+            <div class="comando-item">
+                <span class="cmd">mkdir -p</span>
+                <span class="desc">→ crea carpetas</span>
+            </div>
+            <div class="comando-item">
+                <span class="cmd">read -p</span>
+                <span class="desc">→ pide datos al usuario</span>
+            </div>
+             <div class="comando-item">
+                <span class="cmd">echo "un texto"</span>
+                <span class="desc">→ muestra texto en pantalla</span>
+            </div>
+        </div>
+
+        <!-- ========== ENTREGABLE ========== -->
+        <!-- <div class="entregable">
+            <h3>📤 Entregable</h3>
+            <p>Creá una carpeta llamada <code>tp_menu</code> y guardá dentro:</p>
+            <ol>
+                <li>El script <code>menu_herramientas.sh</code>.</li>
+                <li>Una captura de pantalla (o copia) de la ejecución del script mostrando al menos dos opciones.</li>
+                <li>Un archivo <code>explicacion.txt</code> donde expliques con tus palabras:
+                    <ul>
+                        <li>¿Qué hace cada opción?</li>
+                        <li>¿Cómo funciona el <code>case</code>?</li>
+                        <li>(Si hiciste el extra) ¿Cómo funciona el <code>while</code>?</li>
+                    </ul>
+                </li>
+            </ol>
+        </div> -->
+
+        <!-- ========== CIERRE ========== -->
+        <!-- <div style="margin-top: 2rem; border-top: 2px dashed #cbd5e1; padding-top: 1.5rem; text-align: center; color: #475569; font-size: 0.9rem;">
+            <p>💻 Taller de Sistemas Operativos · DGETP · 2° Bachillerato Tecnológico</p>
+        </div> -->
+
+    </div>
+</body>
+</html>
