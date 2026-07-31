@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctico: Auditoría y Búsqueda en el Sistema</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        code {
+            background-color: #e8e8e8;
+            color: #c7254e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .tree {
+            font-family: monospace;
+            background-color: #1e1e1e;
+            color: #4ec9b0;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre;
+            line-height: 1.3;
+        }
+        .alert {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .info {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+        ol, ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔍 Actividad: Auditoría de Archivos y Filtros</h1>
+    <!-- <p><strong>Unidad Curricular:</strong> Sistemas Operativos - 2.º BT IT (DGETP / UTU)</p> -->
+
+    <div class="card">
+        <h2>📌 Objetivo</h2>
+        <p>Rastrear, filtrar y manipular archivos específicos en el servidor mediante el uso de comandos de búsqueda y filtrado de texto, integrando estos procesos en la automatización de tareas.</p>
+    </div>
+
+    <!-- PASO 1 -->
+    <div class="card">
+        <h2>Paso 1: Preparación del Entorno de Trabajo</h2>
+        <p>En tu directorio personal (<code>~/</code>), debes crear la siguiente estructura de carpetas y archivos. Interpreta el árbol visual y utiliza los comandos de terminal correspondientes (<code>mkdir</code>, <code>touch</code>, <code>cd</code>, etc.) para construirlo.</p>
+
+        <div class="tree">
+~/Auditoria_Sistema/
+├── documentos/
+│   ├── informe_2026.txt
+│   └── notas_viejas.tmp
+├── logs/
+│   ├── acceso.log
+│   ├── errores.log
+│   └── sistema.log
+└── temporales/
+    ├── cache.tmp
+    └── descarga_incompleta.tmp
+        </div>
+
+        <div class="info">
+            💡 <strong>Contenido obligatorio dentro de algunos archivos:</strong>
+            <ul>
+                <li>En <code>logs/errores.log</code> escribe 3 o 4 líneas de texto inventadas, pero asegúrate de que al menos dos líneas incluyan la palabra <strong>"CRITICAL"</strong> o <strong>"ERROR"</strong>.</li>
+                <li>En <code>documentos/informe_2026.txt</code> escribe un párrafo breve sobre cualquier tema.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="card">
+        <h2>Paso 2: Caja de Herramientas (Ejemplos)</h2>
+        <p>A continuación se muestran ejemplos de cómo funcionan los comandos principales.</p>
+
+        <h3>1. Comando <code>find</code> (Buscar archivos por nombre o extensión)</h3>
+        <p>Permite rastrear archivos en el sistema según su nombre, tamaño o ubicación.</p>
+        <pre># Ejemplo: Buscar todos los archivos que terminan en ".pdf" en la carpeta actual
+find . -name "*.pdf"</pre>
+
+        <h3>2. Comando <code>grep</code> (Buscar texto DENTRO de los archivos)</h3>
+        <p>Permite analizar el contenido de un archivo y mostrar solo las líneas que coinciden con una palabra clave.</p>
+        <pre># Ejemplo: Buscar la palabra "Usuario" dentro del archivo "lista.txt" (la opción -i ignora mayúsculas/minúsculas)
+grep -i "Usuario" lista.txt</pre>
+
+        <h3>3. Redirección de salida <code>></code> y <code>>></code></h3>
+        <p>Envía la respuesta de un comando directamente a un archivo de texto en lugar de mostrarla en la pantalla.</p>
+        <pre># Ejemplo: Guarda el resultado del listado dentro de un archivo nuevo llamado "resultado.txt"
+ls -l > resultado.txt</pre>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="card">
+        <h2>Paso 3: Desafío / Consignas a Resolver</h2>
+        <p>Utilizando la estructura <code>Auditoria_Sistema</code> que creaste en el Paso 1, resuelve los siguientes puntos en tu terminal de Rocky Linux:</p>
+
+        <ol>
+            <li><strong>Búsqueda de archivos temporales:</strong> Encuentra todos los archivos que tengan la extensión <code>.tmp</code> dentro del directorio <code>Auditoria_Sistema</code>.</li>
+            <li><strong>Auditoría de Errores:</strong> Busca únicamente las líneas que contengan la palabra <strong>"CRITICAL"</strong> o <strong>"ERROR"</strong> dentro de tu archivo <code>errores.log</code>.</li>
+            <li><strong>Generación de Reporte:</strong> Utiliza el comando de búsqueda del punto 2 y <u>guarda el resultado</u> en un nuevo archivo llamado <code>reporte_incidentes.txt</code> dentro de la carpeta <code>logs/</code>.</li>
+            <li><strong>Desafío de Integración (Menú de Herramientas):</strong> 
+                <br>Abre el script del Menú de Herramientas que trabajamos en clases anteriores y agrega las siguientes opciones:
+                <ul>
+                    <li><strong>Auditar archivos temporales :</strong> Muestra en pantalla la lista de todos los archivos <code>.tmp</code> que existen en tu carpeta de auditoría.</li>
+                    <li><strong>Extraer log de errores :</strong> Ejecuta la búsqueda de las palabras <code>CRITICAL</code> o <code>ERROR</code> e informa en pantalla los hallazgos encontrados.</li>
+                    <li><strong>Generar reporte de incidentes :</strong> Genera/actualiza automáticamente el archivo <code>reporte_incidentes.txt</code> e imprime un mensaje de confirmación que diga: <code>"Reporte actualizado con éxito el: [FECHA Y HORA ACTUAL]"</code> (Pista: usa el comando <code>date</code>).</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <!-- <div class="card">
+        <h2>✅ Verificación de Autonomía</h2>
+        <p>Antes de dar por finalizada la tarea, verifica por ti mismo:</p>
+        <ul>
+            <li>¿Se creó el archivo <code>reporte_incidentes.txt</code>? ¿Tiene adentro las líneas con el error? (Comprueba con <code>cat</code>).</li>
+            <li>¿Tu menú ejecuta la nueva opción sin arrojar errores sintácticos en la terminal?</li>
+        </ul>
+    </div> -->
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad: Recuperación y Verificación</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 30px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        .box {
+            background: #eef2f7;
+            border-left: 6px solid #1e5a7a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+        .box code {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .comando {
+            background: #1e2a3a;
+            color: #4a90d9;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .extra {
+            background: #e8f0fe;
+            border-left: 6px solid #0b3b5c;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .recordatorio {
+            background: #eef2f7;
+            border: 1px solid #0b3b5c;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        ul, ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1e5a7a;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>⚡ Actividad: Recuperación y Verificación</h1>
+
+    <p><strong>Objetivo:</strong> Probar la validez de las copias de seguridad realizando una restauración simulada de archivos y creando un script para verificar el estado de los respaldos.</p>
+
+    <hr>
+
+    <h2>📌 Concepto clave</h2>
+
+    <div class="recordatorio">
+        <!-- <p><em>"Un respaldo que no se ha probado restaurar, no es un respaldo."</em></p> -->
+        <p>Para comprobar que un archivo <code>.tar.gz</code> es válido y no está corrupto, debemos ser capaces de listar su contenido o extraerlo en un directorio de prueba.</p>
+    </div>
+
+    <hr>
+
+    <h2>📋 PARTE 1: Restauración de un respaldo</h2>
+
+    <p>Simularemos un escenario de recuperación extrayendo tu copia de seguridad en una carpeta limpia.</p>
+
+    <ol>
+        <li>
+            <strong>Crear una carpeta de prueba para la restauración:</strong>
+            <div class="comando">mkdir -p /var/www/html/usuario/recuperado</div>
+        </li>
+        <li>
+            <strong>Ver el contenido del respaldo sin descomprimirlo:</strong><br>
+            El parámetro <code>-t</code> permite listar los archivos empaquetados dentro de un archivo <code>.tar.gz</code>:
+            <div class="box">
+                <code>tar -tzf /var/www/html/usuario/backups/nombre_de_tu_backup.tar.gz</code>
+            </div>
+        </li>
+        <li>
+            <strong>Restaurar los archivos:</strong><br>
+            Usa el comando <code>tar -xzf</code> junto con la opción <code>-C</code> para extraer todo el contenido dentro de la carpeta de prueba que creaste:
+            <div class="box">
+                <code>tar -xzf /var/www/html/usuario/backups/nombre_de_tu_backup.tar.gz -C /var/www/html/usuario/recuperado/</code>
+            </div>
+        </li>
+        <li>
+            <strong>Verificar la recuperación:</strong><br>
+            Ingresa desde el navegador web para confirmar que tus archivos se restauraron correctamente:
+            <div class="comando">http://192.168.2.245/usuario/recuperado/</div>
+        </li>
+    </ol>
+
+    <hr>
+
+   <h2>📋 PARTE 2: Script de verificación del último backup</h2>
+
+    <p><strong>Ejemplo de comando para ver el archivo más reciente de un directorio:</strong></p>
+
+    <p>Para mostrar los detalles del archivo creado más recientemente, podemos ordenar por fecha con <code>ls -lht</code> y filtrar las primeras líneas con <code>head -n 2</code> (la cabecera y el primer archivo):</p>
+
+    <div class="box">
+        <code>ls -lht /carpeta/ejemplo/ | head -n 2</code>
+    </div>
+
+    <h3>✍️ Consigna de la Parte 2:</h3>
+    <ol>
+        <li>Crea un script llamado <strong><code>verificar.sh</code></strong>.</li>
+        <li>El script debe mostrar un título (usando <code>echo</code>) que diga: <code>"=== ESTADO DEL ÚLTIMO RESPALDO ==="</code>.</li>
+        <li>A continuación, el script debe ejecutar el comando correspondiente para listar **únicamente el último archivo de respaldo** que se generó dentro de tu carpeta <code>/var/www/html/usuario/backups/</code>.</li>
+        <li>Otorga permisos de ejecución al script (<code>chmod 755</code>).</li>
+        <li>Ejecuta el script guardando su resultado en un archivo llamado <code>estado_backup.txt</code> dentro de tu carpeta web:
+            <div class="comando">/var/www/html/usuario/verificar.sh &gt; /var/www/html/usuario/estado_backup.txt</div>
+        </li>
+        <li>Verifica desde el navegador ingresando a <code>http://192.168.2.245/usuario/estado_backup.txt</code>.</li>
+    </ol>
+
+    <hr>
+
+    <h2>📌 Resumen de comandos de la actividad</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Comando</th>
+                <th>¿Qué hace?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>tar -tzf archivo.tar.gz</code></td>
+                <td>Muestra el contenido de un respaldo sin descomprimirlo</td>
+            </tr>
+            <tr>
+                <td><code>tar -xzf archivo.tar.gz -C /ruta/</code></td>
+                <td>Extrae y restaura el contenido del respaldo en la ruta indicada</td>
+            </tr>
+            <tr>
+                <td><code>ls -lht /ruta/ | head -n 2</code></td>
+                <td>Muestra únicamente el archivo más reciente de una carpeta con su tamaño y fecha</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
