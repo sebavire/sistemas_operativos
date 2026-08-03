@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctico: Respaldos Automáticos y Seguros</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #27ae60;
+            margin-top: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 12px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        code {
+            background-color: #e8e8e8;
+            color: #c7254e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .example-box {
+            background-color: #f0f7f4;
+            border-left: 4px solid #27ae60;
+            padding: 10px 15px;
+            margin: 10px 0 20px 0;
+        }
+        .example-box p {
+            margin: 0 0 5px 0;
+            font-weight: bold;
+            color: #1e8449;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📦 Actividad: Sistema de Respaldos Automáticos</h1>
+    <!-- <p><strong>Unidad Curricular:</strong> Sistemas Operativos - 2.º BT IT (DGETP / UTU)</p> -->
+
+    <div class="card">
+        <h2>📌 Escenario de Trabajo</h2>
+        <p>Como administradores del servidor Rocky Linux, debemos garantizar que la carpeta <code>Auditoria_Sistema</code> (creada la clase pasada) se respalde de forma periódica, se mantenga protegida contra accesos no autorizados y no termine saturando el espacio en disco con archivos viejos.</p>
+    </div>
+
+    <div class="card">
+        <h2>🛠️ Consigna</h2>
+
+        <!-- TAREA 1 -->
+        <h3>1. Creación del Script de Respaldo</h3>
+        <p>Crea un script llamado <code>backup_sistema.sh</code> en tu carpeta personal. Este script debe realizar tres acciones:</p>
+        <ul>
+            <li>Asegurar que exista una carpeta destino llamada <code>~/Respaldos</code>.</li>
+            <li>Empaquetar y comprimir la carpeta <code>Auditoria_Sistema</code> dentro de <code>~/Respaldos</code>. El archivo resultante debe incluir la fecha y hora actual en su nombre (ejemplo: <code>backup_2026-08-03_10-30.tar.gz</code>).</li>
+        </ul>
+
+        <div class="example-box">
+            <p>💡 Ejemplos de referencia para la Tarea 1:</p>
+            <small>Para crear una carpeta sin que el sistema arroje un error si ya existe:</small>
+            <pre>mkdir -p /ruta/de/la/carpeta</pre>
+            <small>Para crear un empaquetado comprimido con la fecha actual incluida en el nombre:</small>
+            <pre>tar -czf ~/mi_archivo_$(date +%Y-%m-%d_%H-%M).tar.gz /ruta/origen</pre>
+        </div>
+
+        <hr>
+
+        <!-- TAREA 2 -->
+        <h3>2. Protección de la Copia de Seguridad (Permisos)</h3>
+        <p>Agrega líneas al final de tu script <code>backup_sistema.sh</code> para que, justo después de crear el respaldo, modifique los permisos de la carpeta <code>~/Respaldos</code> y del paquete generado. El objetivo es que <strong>únicamente tu usuario (el dueño)</strong> tenga todos los accesos (lectura, escritura y ejecución) y se le deniegue todo acceso al grupo y a otros usuarios del servidor.</p>
+
+        <div class="example-box">
+            <p>💡 Ejemplo de referencia para la Tarea 2:</p>
+            <small>Para asignar permisos totales al dueño y restringir completamente al resto (notación octal):</small>
+            <pre>chmod 700 /ruta/al/archivo_o_directorio</pre>
+        </div>
+
+        <hr>
+
+        <!-- TAREA 3 -->
+        <h3>3. Mantenimiento y Limpieza de Respaldos Viejos</h3>
+        <p>Agrega una instrucción al final de tu script para evitar que el servidor se llene de archivos. El script debe buscar dentro de <code>~/Respaldos</code> y <strong>eliminar automáticamente los archivos de respaldo que tengan más de 7 minutos de creados</strong>.</p>
+
+        <div class="example-box">
+            <p>💡 Ejemplo de referencia para la Tarea 3:</p>
+            <small>Para buscar y eliminar archivos con una extensión específica que tengan más de 5 minutos de antigüedad:</small>
+            <pre>find /ruta/de/carpeta -name "*.tar.gz" -mmin +5 -delete</pre>
+        </div>
+
+        <hr>
+
+        <!-- TAREA 4 -->
+        <h3>4. Automatización con Cron</h3>
+        <p>Una vez que probaste el script manualmente y verificaste que funciona, configúralo en la tabla de tareas programadas (<code>crontab</code>) para que el servidor lo ejecute automáticamente <strong>cada 2 minutos</strong>.</p>
+
+        <div class="example-box">
+            <p>💡 Ejemplo de referencia para la Tarea 4:</p>
+            <small>Estructura de una línea de crontab para ejecutar un comando/script cada 5 minutos:</small>
+            <!-- <pre>*/5 * * * * /bin/bash /ruta/completa/a/tu/script.sh</pre> -->
+             <pre>*/5 * * * * /ruta/completa/a/tu/script.sh</pre>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <h2>✅ Verificación de Autonomía</h2>
+        <p>Comprueba por ti mismo el correcto funcionamiento del sistema antes de finalizar:</p>
+        <ol>
+            <li>Deja pasar unos minutos y revisa la carpeta <code>~/Respaldos</code> con el comando <code>ls -l ~/Respaldos</code>.</li>
+            <li>Verifica si los permisos de la carpeta y archivos muestran exclusivamente <code>rwx------</code> (equivalente a 700).</li>
+            <li>Comprueba que nunca existan más de 3 archivos <code>.tar.gz</code> almacenados al mismo tiempo en la carpeta de respaldos.</li>
+        </ol>
+    </div>
+
+</body>
+</html>
