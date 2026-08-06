@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad: Compresión y Respaldos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 30px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        hr {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1e5a7a;
+            color: white;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🛠️ Actividad: Compresión y Respaldos</h1>
+
+    <p><strong>Objetivo:</strong> Practicar el uso de comandos para comprimir y descomprimir archivos en la terminal, y aplicar estos comandos dentro de un script funcional.</p>
+
+    <hr>
+
+    <h2>📌 Comandos base (Pizarrón)</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Acción</th>
+                <th>Estructura del comando</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Comprimir una carpeta</td>
+                <td><code>tar -czf nombre_archivo.tar.gz carpeta/</code></td>
+            </tr>
+            <tr>
+                <td>Descomprimir un archivo</td>
+                <td><code>tar -xzf nombre_archivo.tar.gz</code></td>
+            </tr>
+            <tr>
+                <td>Ver el contenido sin descomprimir</td>
+                <td><code>tar -tzf nombre_archivo.tar.gz</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>📋 BLOQUE A: Comandos en la terminal</h2>
+
+    <p>Utilizando los comandos del cuadro anterior, realiza las siguientes tareas en tu terminal:</p>
+
+    <ol>
+        <li>Crea una carpeta llamada <code>compresion_respaldos</code> en tu directorio personal.</li>
+        <li>Crea un archivo de texto llamado <code>notas.txt</code> dentro de la carpeta <code>compresion_respaldos</code> y escribe un mensaje breve en su interior.</li>
+        <li>Comprime la carpeta <code>compresion_respaldos</code> generando un archivo llamado <code>respaldo.tar.gz</code>.</li>
+        <li>Ejecuta el comando correspondiente para verificar qué archivos hay dentro de <code>respaldo.tar.gz</code> sin descomprimirlo.</li>
+        <li>Elimina la carpeta original <code>compresion_respaldos</code>.</li>
+        <li>Restaura la carpeta descomprimiendo el archivo <code>respaldo.tar.gz</code>.</li>
+        <li>Comprueba con el comando de listado que la carpeta y el archivo recuperado están presentes.</li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 BLOQUE B: Crear el script</h2>
+
+    <p>Aplica los conceptos trabajados para construir un script de respaldo:</p>
+
+    <ol>
+        <li>Crea un archivo de script llamado <code>generar_respaldo.sh</code></li>
+        <li>Escribe el script de forma que cumpla con las siguientes acciones al ejecutarse:
+            <ul>
+                <li>Muestre un mensaje en pantalla anunciando el inicio del proceso.</li>
+                <li>Comprime tu carpeta de usuario (ubicada en <code>/home/usuario/</code>) creando un archivo llamado <code>respaldo_usuario.tar.gz</code>.</li>
+                <li>Muestre un mensaje final en pantalla confirmando que terminó.</li>
+            </ul>
+        </li>
+        <li>Otorga los permisos de ejecución necesarios al script.</li>
+        <li>Ejecútalo y comprueba en la terminal que el archivo <code>respaldo_usuario.tar.gz</code> fue creado con éxito.</li>
+    </ol>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctico: Restauración de Respaldos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #c0392b;
+            border-bottom: 3px solid #c0392b;
+            padding-bottom: 5px;
+            font-size: 22px;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #222;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 5px 0;
+            overflow-x: auto;
+        }
+        .box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+        ol {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚨 Actividad: Restauración de Respaldos en Linux</h1>
+    <p><strong>Objetivo:</strong> Recuperar los archivos del respaldo dentro de una carpeta de prueba sin modificar la carpeta original.</p>
+
+    <!-- PARTE 1 -->
+    <div class="card">
+        <h2>PARTE 1: Prueba de Comando Manual</h2>
+        <ol>
+            <li>Crea una carpeta vacía en tu directorio personal llamada: <code>~/Prueba_Restauracion</code></li>
+            <li>Identifica el nombre de uno de los archivos <code>.tar.gz</code> que se crearon en tu carpeta <code>~/Respaldos</code>.</li>
+            <li>Ejecuta en la terminal el comando para descomprimir ese paquete <strong>únicamente dentro de la carpeta <code>~/Prueba_Restauracion</code></strong>.</li>
+            <li>Verifica con <code>ls ~/Prueba_Restauracion</code> que los archivos recuperados aparecieron allí.</li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplo de referencia:</strong><br>
+            Descomprimir un paquete <code>.tar.gz</code> en una carpeta de destino específica (opción <code>-C</code>):
+            <pre>tar -xzf /ruta/archivo_backup.tar.gz -C /ruta/destino/</pre>
+        </div>
+    </div>
+
+    <!-- PARTE 2 -->
+    <div class="card">
+        <h2>PARTE 2: Automatización con Script</h2>
+        <p>Crea un script llamado <code>restaurar.sh</code> que realice las siguientes acciones de forma automática al ejecutarlo:</p>
+        <ol>
+            <li>Asegure que exista la carpeta <code>~/Prueba_Restauracion</code> (usa <code>mkdir -p</code>).</li>
+            <li>Busque cuál es el archivo de respaldo <strong>más reciente</strong> dentro de <code>~/Respaldos</code>.</li>
+            <li>Descomprima ese último respaldo automáticamente en la carpeta <code>~/Prueba_Restauracion</code>.</li>
+            <li>Muestre un mensaje en pantalla que diga: <code>"Restauración completada con éxito."</code></li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplo de referencia:</strong><br>
+            Obtener la ruta del archivo más reciente en una carpeta y guardarlo en una variable:
+            <pre>ultimo_archivo=$(ls -t /ruta/de/carpeta/*.tar.gz | head -n 1)</pre>
+            <em>Para usar esa variable en el comando tar: <code>tar -xzf "$ultimo_archivo" -C ...</code></em>
+        </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="card">
+        <h2>✅ Verificación Final</h2>
+        <ul>
+            <li>¿Tu script corre sin tirar errores de sintaxis?</li>
+            <li>¿Aparecen las carpetas <code>documentos</code>, <code>logs</code> y <code>temporales</code> dentro de <code>~/Prueba_Restauracion</code>?</li>
+        </ul>
+    </div>
+
+</body>
+</html>
