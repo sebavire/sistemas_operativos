@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctico: Auditoría e Historial de Restauración</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #27ae60;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 5px;
+            font-size: 22px;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #222;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 5px 0;
+            overflow-x: auto;
+        }
+        .box {
+            background-color: #e8f8f5;
+            border-left: 4px solid #27ae60;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+        ol {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔍 Actividad de Extensión: Auditoría e Historial de Restauración</h1>
+    <p><strong>Objetivo:</strong> Evolucionar el script de recuperación para que informe sus acciones en pantalla, sea resistente a fallos de carpetas inexistentes y guarde un registro histórico.</p>
+
+    <!-- PASO 1 -->
+    <div class="card">
+        <h2>PASO 1: Reporte Visual en Pantalla</h2>
+        <p>Abre tu script <code>restaurar.sh</code> y modifícalo para que muestre mensajes informativos durante su ejecución:</p>
+        <ol>
+            <li>Imprime un encabezado inicial en la terminal que indique el comienzo del proceso.</li>
+            <li>Muestra en pantalla el contenido actual de la carpeta de prueba <code>~/Prueba_Restauracion</code> antes de descomprimir.</li>
+            <li>Ejecuta la descompresión del respaldo más reciente (lo que ya tenías programado).</li>
+            <li>Imprime un mensaje final de cierre y vuelve a mostrar el contenido de la carpeta para confirmar que los archivos aparecieron.</li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplos de referencia:</strong><br>
+            Mostrar un mensaje de texto en pantalla:
+            <pre>echo "=== TEXTO A MOSTRAR ==="</pre>
+            Listar los archivos de un directorio específico:
+            <pre>ls /ruta/del/directorio</pre>
+        </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="card">
+        <h2>PASO 2: Prueba de Resistencia ("Directorio Vacío")</h2>
+        <p>Un buen script de administración debe funcionar incluso si la carpeta destino fue borrada por error.</p>
+        <ol>
+            <li>Elimina por completo la carpeta <code>~/Prueba_Restauracion</code> desde tu terminal para simular la falla. (<code>rm -rf carpeta</code>)</li>
+            <li>Asegúrate de que tu script contenga la instrucción para crear esa carpeta automáticamente si no existe (usando <code>mkdir -p</code>).</li>
+            <li>Ejecuta tu script <code>restaurar.sh</code>.</li>
+            <li>Verifica que la carpeta se volvió a crear sola y que los archivos se restauraron correctamente sin arrojar errores.</li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplo de referencia:</strong><br>
+            Crear un directorio garantizando que no tire error si ya está creado:
+            <pre>mkdir -p /ruta/del/directorio</pre>
+        </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="card">
+        <h2>PASO 3: Registro Histórico (Log de Auditoría)</h2>
+        <p>Agrega instrucciones al final de tu script para llevar un registro automático de cada restauración realizada:</p>
+        <ol>
+            <li>Cada vez que se ejecute el script, debe agregar una línea con la fecha y hora exacta dentro de un archivo de registro llamado <code>historial_restauraciones.log</code> (ubicado en tu carpeta personal).</li>
+            <li>Ejecuta el script de restauración 2 o 3 veces seguidas.</li>
+            <li>Comprueba con el comando de lectura correspondiente que el archivo acumule todas las ejecuciones realizadas.</li>
+        </ol>
+
+        <div class="box">
+
+            📌 <strong>Ejemplos de referencia:</strong><br>
+            Guardar un texto adjuntando la fecha actual al final de un archivo sin borrar el contenido anterior (operador <code>>></code>):
+            <pre>echo "mensaje: $(date)" >> ~/archivo.log</pre>
+            <!-- Leer el contenido completo de un archivo de texto por pantalla:
+            <pre>cat /ruta/al/archivo_sistema.log</pre> -->
+        </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="card">
+        <h2>✅ Verificación Final</h2>
+        <ul>
+            <li>¿El script muestra en pantalla el "antes" y el "después" de la carpeta?</li>
+            <li>¿Si borras la carpeta de prueba, el script la recrea sin fallar?</li>
+            <li>¿El archivo <code>historial_restauraciones.log</code> tiene guardadas las fechas de cada prueba?</li>
+        </ul>
+    </div>
+
+</body>
+</html>

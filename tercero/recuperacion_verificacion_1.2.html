@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad: Recuperación y Verificación</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 30px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        .box {
+            background: #eef2f7;
+            border-left: 6px solid #1e5a7a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+        .box code {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .recordatorio {
+            background: #eef2f7;
+            border: 1px solid #0b3b5c;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        ul, ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1e5a7a;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>⚡ Actividad: Recuperación y Verificación</h1>
+
+    <p><strong>Objetivo:</strong> Probar la validez de las copias de seguridad realizando una restauración simulada de archivos y automatizando la localización del último respaldo mediante variables en un script.</p>
+
+    <hr>
+
+    <h2>📌 Comandos y Estructuras de Referencia</h2>
+
+    <p>Consulta esta sintaxis general para resolver las actividades planteadas a continuación:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Acción / Concepto</th>
+                <th>Sintaxis de referencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ver contenido de un <code>.tar.gz</code></td>
+                <td><code>tar -tzf /ruta/archivo.tar.gz</code></td>
+            </tr>
+            <tr>
+                <td>Descomprimir en un destino específico</td>
+                <td><code>tar -xzf /ruta/archivo.tar.gz -C /ruta/destino/</code></td>
+            </tr>
+            <tr>
+                <td>Guardar el archivo más reciente en una variable</td>
+                <td><code>archivo=$(ls -t /carpeta/*.tar.gz | head -n 1)</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>📋 PARTE 1: Restauración manual de un respaldo</h2>
+
+    <p>Simularemos un escenario de recuperación extrayendo una copia de seguridad en una carpeta de prueba.</p>
+
+    <h3>✍️ Consigna:</h3>
+    <ol>
+        <li>Crea una carpeta de prueba llamada <code>recuperado</code> dentro de tu directorio web personal (<code>/var/www/html/tu_usuario/</code>).</li>
+        <li>Elige uno de los archivos <code>.tar.gz</code> que tengas guardados en tu carpeta de backups y ejecuta el comando para listar su contenido en la terminal sin descomprimirlo.</li>
+        <li>Restaura el contenido de ese archivo <code>.tar.gz</code> **únicamente dentro de la carpeta <code>recuperado</code>** creada en el paso 1.</li>
+        <li>Abre tu navegador web y accede a la dirección de tu carpeta <code>recuperado/</code> para confirmar que los archivos restaurados están visibles correctamente.</li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 PARTE 2: Script de restauración automática</h2>
+
+    <p>En lugar de buscar y escribir manualmente el nombre del archivo de respaldo, crearemos un script que identifique el último respaldo creado y lo descomprima de forma automática.</p>
+
+    <h3>✍️ Consigna:</h3>
+    <ol>
+        <li>Crea un script llamado <code>restaurar_ultimo.sh</code> usando el editor <code>nano</code>.</li>
+        <li>Escribe el script para que realice las siguientes tareas al ejecutarse:
+            <ul>
+                <li>Muestre un mensaje en pantalla indicando que se inicia la restauración.</li>
+                <li>Busque cuál es el archivo <code>.tar.gz</code> más reciente dentro de tu carpeta de respaldos (<code>/var/www/html/tu_usuario/backups/</code>) y guarde su ruta dentro de una variable llamada <code>ultimo_backup</code>.</li>
+                <li>Descomprima ese último respaldo guardado en la variable dentro de tu carpeta <code>recuperado/</code>.</li>
+                <li>Muestre un mensaje final informando que la restauración ha concluido.</li>
+            </ul>
+        </li>
+        <li>Otorga los permisos de ejecución necesarios al script.</li>
+        <li>Ejecútalo en la terminal y comprueba desde el navegador web que los archivos actualizados se encuentran en tu carpeta <code>recuperado/</code>.</li>
+    </ol>
+
+</div>
+</body>
+</html>
