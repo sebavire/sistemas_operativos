@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad Práctica: Sincronización con rsync</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 30px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        hr {
+            margin: 30px 0;
+            border: 1px solid #ddd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #1e5a7a;
+            color: white;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+        .alerta {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🔄 Actividad Práctica: Sincronización Eficiente con rsync</h1>
+
+    <!-- <p><strong>Objetivo:</strong> Comprender el funcionamiento de la herramienta <code>rsync</code> para sincronizar directorios de forma eficiente, transfiriendo únicamente las diferencias entre origen y destino.</p> -->
+
+    <!-- <hr> -->
+
+    <h2>📌 Referencia de la herramienta</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Comando</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>rsync -avz ~/origen/ ~/destino/</code></td>
+                <td>Sincroniza el contenido del directorio origen hacia el destino.</td>
+            </tr>
+            <!-- <tr>
+                <td><code>-a</code> (archive)</td>
+                <td>Conserva permisos, fechas de modificación y copia subcarpetas.</td>
+            </tr>
+            <tr>
+                <td><code>-v</code> (verbose)</td>
+                <td>Muestra en pantalla el detalle de los archivos transferidos.</td>
+            </tr>
+            <tr>
+                <td><code>-z</code> (compress)</td>
+                <td>Comprime los datos durante la transferencia para mayor rapidez.</td>
+            </tr> -->
+            <tr>
+                <td><code>rsync -avz --delete ~/origen/ ~/destino/</code></td>
+                <td>Elimina en el destino los archivos que ya no existen en el origen.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="alerta">
+        ⚠️ <strong>Atención a la barra final (<code>/</code>):</strong> Poner <code>origen/</code> sincroniza el <em>contenido</em> de la carpeta. Omitir la barra (<code>origen</code>) copia la carpeta entera.
+    </div>
+
+    <hr>
+
+    <h2>📋 BLOQUE A: Preparación de directorios</h2>
+
+    <ol>
+        <li>Accede al servidor por SSH desde PowerShell.</li>
+        <li>Crea un directorio llamado <code>origen_datos</code> y una subcarpeta llamada <code>documentos</code> dentro de él.</li>
+        <li>Usando el editor <code>nano</code>, crea dos archivos de texto:
+            <ul>
+                <li><code>origen_datos/nota1.txt</code></li>
+                <li><code>origen_datos/documentos/informe.txt</code></li>
+            </ul>
+        </li>
+        <li>Crea una carpeta vacía llamada <code>destino_copia</code> donde guardaremos la sincronización.</li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 BLOQUE B: Práctica de sincronización incremental</h2>
+
+    <ol>
+        <li><strong>Primera copia (Copia completa inicial):</strong><br>
+            Ejecuta el comando <code>rsync</code> con las opciones <code>-avz</code> para sincronizar el contenido de <code>origen_datos/</code> hacia <code>destino_copia/</code>.<br>
+            <em>Observa la salida en la terminal: verás que transfiere todos los archivos creados.</em>
+        </li>
+        <li><strong>Comprobación del destino:</strong><br>
+            Verifica con el comando de listado el contenido de la carpeta <code>destino_copia/</code> para confirmar que los archivos están allí.
+        </li>
+        <li><strong>Prueba de cambio (Sincronización incremental):</strong><br>
+            Crea un nuevo archivo llamado <code>nota2.txt</code> dentro de <code>origen_datos/</code> usando <code>nano</code>.
+        </li>
+        <li><strong>Segunda copia:</strong><br>
+            Vuelve a ejecutar exactamente el mismo comando de <code>rsync</code> que en el paso 1.<br>
+            <em>Observa detenidamente la terminal: ¿Qué archivos se transfirieron esta vez?</em>
+        </li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 BLOQUE C: Manejo de eliminaciones (Efecto espejo)</h2>
+
+    <ol>
+        <li>Elimina el archivo <code>nota1.txt</code> de tu carpeta <code>origen_datos/</code>.</li>
+        <li>Ejecuta nuevamente el comando <code>rsync -avz origen_datos/ destino_copia/</code>.</li>
+        <li>Revisa el contenido de <code>destino_copia/</code>. El archivo <code>nota1.txt</code> sigue existiendo allí porque la sincronización por defecto no elimina datos en el destino.</li>
+        <li>Ahora ejecuta el comando agregando la opción de borrado:
+            <br><code>rsync -avz --delete origen_datos/ destino_copia/</code>
+        </li>
+        <li>Verifica nuevamente la carpeta <code>destino_copia/</code> para confirmar qué ocurrió con el archivo eliminado.</li>
+    </ol>
+
+    <hr>
+
+    <h2>🚀 BLOQUE D: Automatización con Script y Cron</h2>
+
+    <ol>
+        <li>Crea un script llamado <code>sincronizar.sh</code> en tu directorio personal usando <code>nano</code>.</li>
+        <li>Escribe dentro del script la orden para sincronizar <code>origen_datos/</code> hacia <code>destino_copia/</code> manteniendo el efecto espejo (<code>--delete</code>).
+            <div class="alerta">
+                📌 <strong>Nota para Cron:</strong> Dentro del script, utiliza las rutas absolutas completas (ejemplo: <code>/home/usuario/origen_datos/</code>) para evitar fallos de ejecución.
+            </div>
+        </li>
+        <li>Otorga permisos de ejecución a tu script (<code>chmod 700 sincronizar.sh</code>).</li>
+        <li>Abre la tabla de tareas programadas con el comando <code>crontab -e</code>.</li>
+        <li>Configura una regla para que el script <code>sincronizar.sh</code> se ejecute automáticamente **cada 1 minuto** (sintaxis: <code>* * * * *</code>).</li>
+        <li><strong>Comprobación final:</strong> Crea un archivo <code>prueba_cron.txt</code> dentro de <code>~/origen_datos/</code>. Espera un minuto sin tocar la terminal y verifica si el archivo apareció de forma automática dentro de <code>~/destino_copia/</code>.</li>
+    </ol>
+
+</div>
+</body>
+</html>
