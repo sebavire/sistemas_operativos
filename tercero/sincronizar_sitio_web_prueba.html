@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío Exprés: Publicación Web con rsync</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 25px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        hr {
+            margin: 25px 0;
+            border: 1px solid #ddd;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+        .alerta {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>⚡ Desafío: Publicación de Sitio Web en Apache</h1>
+
+    <p><strong>Escenario:</strong> Vas a simular el flujo de trabajo de publicación web. Crearás archivos simples en tu carpeta privada y usarás <code>rsync</code> para hacer el despliegue hacia tu espacio web público en Apache (<code>/var/www/html/usuario/</code>).</p>
+
+    <div class="alerta">
+        🌐 <strong>Comprobación en vivo:</strong> En cada paso podrás verificar los cambios abriendo tu navegador en Windows e ingresando a: <br>
+        <code>http://IP_DEL_SERVIDOR/usuario/</code>
+    </div>
+
+    <hr>
+
+    <h2>📋 Paso 1: Preparar la carpeta de trabajo</h2>
+    <ol>
+        <li>En tu directorio personal, crea la carpeta <code>~/mi_sitio/</code> y una subcarpeta <code>css/</code> dentro de ella.</li>
+        <li>Usando el editor <code>nano</code>, crea tres archivos con un texto simple en su interior (por ejemplo: "Sitio en construcción"):
+            <ul>
+                <li><code>~/mi_sitio/index.html</code></li>
+                <li><code>~/mi_sitio/contacto.html</code></li>
+                <li><code>~/mi_sitio/css/estilos.css</code></li>
+            </ul>
+        </li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 Paso 2: Publicar en el servidor Web (Deploy)</h2>
+    <ol>
+        <li>Sincroniza el <strong>contenido</strong> de tu carpeta privada hacia tu espacio público en Apache usando <code>rsync -avz</code>, desde <code>~/mi_sitio</code> hacia <code>/var/www/html/usuario/</code> :
+            <div class="code-box">
+                rsync -avz ~/origen /destino/
+            </div>
+        </li>
+        <li>Abre el navegador en Windows y confirma que podés ver el contenido publicado, entrando a http://IP_DEL_SERVIDOR/usuario/mi-sitio</li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 Paso 3: Actualización Incremental</h2>
+    <ol>
+        <li>Modifica el archivo <code>~/mis_paginas/index.html</code> con <code>nano</code> agregándole alguna línea extra.</li>
+        <li>Vuelve a ejecutar la misma orden de sincronización con <code>rsync</code>.</li>
+        <li>Observa la salida de la terminal para confirmar que <strong>solo se transfirió el archivo modificado</strong> y recarga el navegador.</li>
+    </ol>
+
+    <hr>
+
+    <h2>📋 Paso 4: Mantenimiento y Eliminación (Espejo)</h2>
+    <ol>
+        <li>Borra el archivo <code>contacto.html</code> de tu carpeta personal:
+            <div class="code-box">
+                rm ~/carpeta/archivo
+            </div>
+        </li>
+        <li>Sincroniza aplicando la bandera de borrado:
+            <div class="code-box">
+                rsync -avz --delete ~/origen /destino/
+            </div>
+        </li>
+        <li>Verifica desde el navegador que <code>contacto.html</code> ya no existe en tu espacio web.</li>
+    </ol>
+
+</div>
+</body>
+</html>

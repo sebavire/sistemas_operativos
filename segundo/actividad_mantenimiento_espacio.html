@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctico: Mantenimiento y Purga</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.4; color: #222; max-width: 800px; margin: 0 auto; padding: 15px; background-color: #f9f9f9; }
+        h1 { color: #d35400; border-bottom: 3px solid #d35400; padding-bottom: 5px; font-size: 22px; }
+        h2 { color: #2c3e50; font-size: 16px; margin-top: 15px; margin-bottom: 5px; }
+        .card { background: white; padding: 15px; border-radius: 6px; border: 1px solid #ccc; margin-bottom: 15px; }
+        pre { background-color: #222; color: #00ff66; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 13px; margin: 5px 0; overflow-x: auto; }
+        .box { background-color: #fef5e7; border-left: 4px solid #e67e22; padding: 8px 12px; margin: 8px 0; font-size: 13px; }
+        ol { margin: 5px 0; padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>🧹 Actividad Práctica: Script de Mantenimiento y Purga</h1>
+    <p><strong>Objetivo:</strong> Crear un script automatizado que mida el peso de la carpeta de prueba, elimine archivos de registro viejos y guarde un reporte.</p>
+
+    <!-- PASO 1 -->
+    <div class="card">
+        <h2>PASO 1: Diagnóstico de Espacio</h2>
+        <p>Crea un script llamado <code>mantenimiento.sh</code> en tu carpeta personal que realice un reporte inicial:</p>
+        <ol>
+            <li>Muestre un mensaje en pantalla indicando el inicio del mantenimiento.</li>
+            <li>Calcule y muestre en pantalla el espacio utilizado por la carpeta <code>~/Prueba_Restauracion</code>.</li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplo de referencia:</strong><br>
+            Ver el tamaño que ocupa un directorio en formato de lectura humana:
+            <pre>du -sh /ruta/del/directorio</pre>
+        </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="card">
+        <h2>PASO 2: Purga de Archivos .log</h2>
+        <p>Agrega instrucciones a tu script <code>mantenimiento.sh</code> para realizar la limpieza:</p>
+        <ol>
+            <li>Elimina directamente todos los archivos con extensión <code>.log</code> que se encuentren dentro de la carpeta <code>~/Prueba_Restauracion</code>.</li>
+            <li>Muestra en pantalla un mensaje confirmando que la limpieza finalizó.</li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplo de referencia:</strong><br>
+            Borrar directamente archivos con una extensión específica sin pedir confirmación:
+            <pre>rm -f /ruta/del/directorio/*.extension</pre>
+        </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="card">
+        <h2>PASO 3: Registro de Mantenimiento</h2>
+        <p>Agrega la última instrucción para dejar asentada la tarea en tu historial:</p>
+        <ol>
+            <li>Muestra nuevamente el tamaño de la carpeta <code>~/Prueba_Restauracion</code> con <code>du -sh</code> para verificar si cambió el espacio.</li>
+            <li>Guarda una línea en tu archivo <code>historial_restauraciones.log</code> indicando que se realizó el mantenimiento junto con la fecha actual.</li>
+        </ol>
+
+        <div class="box">
+            📌 <strong>Ejemplo de referencia:</strong><br>
+            Registrar un texto con fecha al final de un archivo sin borrar el contenido anterior:
+            <pre>echo "Evento registrado: $(date)" >> ~/ruta/mi_archivo.log</pre>
+        </div>
+    </div>
+
+    <!-- CHECKLIST -->
+    <div class="card">
+        <h2>✅ Verificación Final</h2>
+        <ul>
+            <li>¿Ejecutaste <code>./mantenimiento.sh</code> sin errores en la terminal?</li>
+            <li>¿Comprobaste con <code>ls ~/Prueba_Restauracion</code> que los archivos <code>.log</code> desaparecieron?</li>
+            <li>¿Tu archivo <code>historial_restauraciones.log</code> registró la nueva línea?</li>
+        </ul>
+    </div>
+
+</body>
+</html>
