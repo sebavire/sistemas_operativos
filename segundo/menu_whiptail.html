@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctico: Menú Interactivo con Whiptail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2980b9;
+            border-bottom: 3px solid #2980b9;
+            padding-bottom: 5px;
+            font-size: 22px;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+        pre {
+            background-color: #222;
+            color: #00ff66;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 5px 0;
+            overflow-x: auto;
+        }
+        .box {
+            background-color: #ebf5fb;
+            border-left: 4px solid #2980b9;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 13px;
+        }
+        .img-container {
+            text-align: center;
+            margin: 12px 0;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+        }
+        ol, ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🖥️ Actividad Práctica: Centro de Control Gráfico con Whiptail</h1>
+    <p><strong>Objetivo:</strong> Crear un menú interactivo en la terminal usando la herramienta <code>whiptail</code> para consultar información del servidor mediante ventanas gráficas.</p>
+
+    <!-- CONSIGNA DE TRABAJO (ARRIBA) -->
+    <div class="card">
+        <h2>✏️ Consigna de Trabajo</h2>
+        <p>Crea un script llamado <code>menu_control.sh</code> en tu carpeta personal que ejecute un menú en bucle continuo para consultar la siguiente información del servidor Rocky Linux:</p>
+        <ol>
+            <li><strong>Opción 1:</strong> Mostrar el espacio en disco (comando <code>df -h /</code>).</li>
+            <li><strong>Opción 2:</strong> Mostrar la memoria RAM disponible (comando <code>free -h</code>).</li>
+            <li><strong>Opción 3:</strong> Mostrar el historial de restauraciones (comando <code>cat ~/historial_restauraciones.log</code>).</li>
+            <li><strong>Opción 4:</strong> Salir del programa.</li>
+        </ol>
+    </div>
+
+    <!-- PASO 1: ESTRUCTURA DEL MENÚ -->
+    <div class="card">
+        <h2>PASO 1: Iniciar la Estructura del Menú</h2>
+        <p>Comienza escribiendo el bucle <code>while true</code> y la llamada a <code>whiptail</code> para desplegar el cuadro de opciones:</p>
+
+        <div class="img-container">
+            <img src="img_whiptail/01.png" alt="Código base de whiptail en Bash">
+        </div>
+
+        <div class="box">
+            📌 <strong>Explicación de parámetros:</strong>
+            <ul>
+                <li><code>15 60 3</code>: Definen el alto (15 filas), ancho (60 caracteres) y la cantidad de opciones del menú (3).</li>
+                <li><code>3>&1 1>&2 2>&3</code>: Permite capturar la opción seleccionada dentro de la variable OPCION, sin romper la pantalla gráfica del menú.</li>
+            </ul>
+        </div>
+
+        <p>Al ejecutar esta primera parte, la terminal desplegará el menú visual interactivo:</p>
+
+        <div class="img-container">
+            <img src="img_whiptail/02.png" alt="Menú interactivo desplegado en la terminal">
+        </div>
+    </div>
+
+    <!-- PASO 2: PROCESAR CON CASE -->
+    <div class="card">
+        <h2>PASO 2: Procesar la Opción Elegida</h2>
+        <p>Agrega la estructura <code>case</code> para evaluar qué opción tocó el usuario y ejecutar una acción (o salir si selecciona <code>*</code>):</p>
+
+        <div class="img-container">
+            <img src="img_whiptail/03.png" alt="Evaluación de la variable OPCION con case">
+        </div>
+
+        <p>Cuando el usuario seleccione la Opción 1, el script ejecutará la acción dentro del caso y la mostrará en una ventana emergente (<code>--msgbox</code>):</p>
+
+        <div class="img-container">
+            <img src="img_whiptail/04.png" alt="Ventana emergente emergente msgbox mostrando la respuesta">
+        </div>
+    </div>
+
+    <!-- CHECKLIST DE VERIFICACIÓN -->
+    <div class="card">
+        <h2>✅ Verificación Final</h2>
+        <ul>
+            <li>¿Otorgaste permisos de ejecución con <code>chmod 700 menu_control.sh</code>?</li>
+            <li>¿Podés navegar entre las opciones usando las flechas del teclado y <kbd>Enter</kbd>?</li>
+            <li>¿Cada opción muestra su información correspondiente dentro de una ventana <code>--msgbox</code>?</li>
+            <li>¿La opción 4 o presionar <kbd>Cancelar</kbd> sale limpiamente del script?</li>
+        </ul>
+    </div>
+
+</body>
+</html>
