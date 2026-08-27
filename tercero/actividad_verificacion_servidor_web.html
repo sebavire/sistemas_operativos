@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actividad: Inspección de Servicios y Red con curl y systemctl</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6f9; padding: 20px; color: #1e2a3a; }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #0b3b5c; border-bottom: 3px solid #0b3b5c; padding-bottom: 8px; }
+        h2 { color: #1e5a7a; margin-top: 25px; }
+        .reto { background: #eef2f7; border-left: 5px solid #1e5a7a; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .pregunta { background: #fff3cd; border-left: 5px solid #ffc107; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .code-inline { background: #e0e0e0; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🔍 Actividad: Verificación de Servidor Web (systemctl y curl)</h1>
+
+    <p><strong>Objetivo:</strong> Aprender a comprobar el estado de un servicio en el servidor y diagnosticar la respuesta de las páginas web desde la propia terminal.</p>
+
+    <hr>
+
+    <h2>Parte 1: Estado del servicio web con systemctl</h2>
+
+    <div class="reto">
+        <h3>📋 Paso 1: Inspeccionar el servicio Apache</h3>
+        <p>En la terminal, ejecutá el siguiente comando para ver la información del servidor web:</p>
+        <p class="code-inline">systemctl status httpd</p>
+        
+        <div class="pregunta">
+            ✍️ <strong>Observá la pantalla y respondé:</strong>
+            <ul>
+                <li>En la línea <code>Active:</code>, ¿qué texto aparece en verde? (Ejemplo: <i>active (running)</i>).</li>
+                <li>¿Podés identificar desde qué día o fecha está encendido el servidor?</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Parte 2: Probando la red local con curl</h2>
+
+    <div class="reto">
+        <h3>📋 Paso 2: Consultar tu página pública</h3>
+        <p>Para ver qué responde el servidor a tu carpeta web, usá el comando <span class="code-inline">curl -I</span> agregando tu ruta al final:</p>
+        <p class="code-inline">curl -I http://localhost/tu_usuario/</p>
+
+        <div class="pregunta">
+            ✍️ <strong>Mirá la primera línea que devuelve la terminal (empieza con HTTP/1.1):</strong><br>
+            ¿Qué número aparece al lado de HTTP/1.1? (Ese número significa que la página existe y cargó correctamente).
+        </div>
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 3: Probar un archivo que NO existe</h3>
+        <p>Ahora intentá consultar con <span class="code-inline">curl -I</span> un archivo que no hayas creado, por ejemplo:</p>
+        <p class="code-inline">curl -I http://localhost/tu_usuario/archivo_falso.txt</p>
+
+        <div class="pregunta">
+            ✍️ <strong>Compará la salida:</strong><br>
+            ¿Qué número aparece ahora en la primera línea? ¿Qué creen que significa ese número cuando navegamos en internet?
+        </div>
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 4: Provocar un error de permisos (Simulación)</h3>
+        <ol>
+            <li>Quita los permisos de lectura a tu carpeta web ejecutando: <br><span class="code-inline">chmod 000 /var/www/html/tu_usuario</span></li>
+            <li>Vuelve a probar el comando: <br><span class="code-inline">curl -I http://localhost/tu_usuario/</span></li>
+            <li>Anotá el número nuevo que aparece en la primera línea (significa "Acceso Prohibido").</li>
+            <li>Restablece los permisos de tu carpeta ejecutando: <br><span class="code-inline">chmod 755 /var/www/html/tu_usuario</span></li>
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>
