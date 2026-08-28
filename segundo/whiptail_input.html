@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práctico: Menú Interactivo Actividad 2</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+    h2 { color: #2980b9; margin-top: 25px; }
+    .ejemplo-box { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    .ejemplo-box img { max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 4px; margin-top: 10px; display: block; }
+    ol { padding-left: 20px; }
+    li { margin-bottom: 12px; }
+    code { background: #272822; color: #f8f8f2; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
+    /* Estilo idéntico al editor de las capturas */
+.code-box {
+  background-color: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  padding: 14px 18px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1b1e23;
+  overflow-x: auto;
+  white-space: pre;
+  margin-top: 10px;
+}
+
+/* Colores de sintaxis */
+.code-box .param { color: #a626a4; font-weight: bold; }   /* --title, --inputbox, --msgbox */
+.code-box .str { color: #986801; }                       /* "Ingresa un dato", etc. */
+.code-box .var { color: #1b1e23; }                       /* DATO0= */
+.code-box .sub { color: #50a14f; font-weight: bold; }    /* =$( */
+.code-box .redir { color: #0184bc; }                     /* 3>&1 1>&2 2>&3 */
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Actividad 2: Expandiendo el Menú con Whiptail</h1>
+  <p>Agrega dos nuevas opciones a tu script <code>menu_control.sh</code> para interactuar con el usuario y consultar el estado de la red.</p>
+
+  <!-- EJEMPLO 1: INPUTBOX SIMPLE -->
+  <div class="ejemplo-box">
+    <h3>Ejemplo 1: Capturar texto del usuario</h3>
+    <p>Usa esta estructura para pedir un dato al usuario y mostrarlo directamente en un mensaje:</p>
+    <!-- <img src="img_whiptail/05.png" alt="Ejemplo de inputbox simple"> -->
+     <div class="code-box">DATO<span class="sub">=$(</span>whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--inputbox</span> <span class="str">"Ingresa un dato"</span> 10 60 <span class="redir">3>&amp;1 1>&amp;2 2>&amp;3</span>)
+whiptail <span class="param">--title</span> <span class="str">"Respuesta"</span> <span class="param">--msgbox</span> <span class="str">"Dato ingresado: $DATO"</span> 10 50</div>
+  </div>
+
+  <!-- EJEMPLO 2: INPUTBOX + COMANDO -->
+  <div class="ejemplo-box">
+    <h3>Ejemplo 2: Usar la entrada en un comando de Linux</h3>
+    <p>Usa esta estructura para capturar un dato, pasárselo a un comando y mostrar el resultado del comando:</p>
+    <!-- <img src="img_whiptail/06.png" alt="Ejemplo de inputbox con comando"> -->
+     <div class="code-box">DATO<span class="sub">=$(</span>whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--inputbox</span> <span class="str">"Ingresa un dato"</span> 10 60 <span class="redir">3>&amp;1 1>&amp;2 2>&amp;3</span>)
+COMANDO<span class="sub">=$(</span>comando <span class="str">"$DATO"</span>)
+whiptail <span class="param">--title</span> <span class="str">"Respuesta"</span> <span class="param">--msgbox</span> <span class="str">"Resultado: $COMANDO"</span> 10 50</div>
+  </div>
+
+  <h2>📝 Consignas de la Actividad</h2>
+  <ol>
+    <li>
+      <strong>Opción 5 - Saludo Personalizado:</strong><br>
+      Basándote en el <em>Ejemplo 1</em>, agrega la opción 5 a tu menú para pedirle el nombre al usuario e imprimir un saludo como: 
+      <code>"Hola [Nombre] ! Bienvenido al menú de control del servidor."</code>
+    </li>
+    <li>
+      <strong>Opción 6 - Probar Conectividad (Ping):</strong><br>
+      Basándote en el <em>Ejemplo 2</em>, agrega la opción 6 para pedir una dirección IP o dominio y ejecutar el comando <code>ping -c 4 "$DATO"</code>. Muestra el resultado dentro de la ventana de mensaje.
+    </li>
+  </ol>
+</div>
+
+</body>
+</html>
