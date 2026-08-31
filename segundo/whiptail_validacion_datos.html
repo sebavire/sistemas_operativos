@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práctico: Menú Interactivo Actividad 3</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+    h2 { color: #2980b9; margin-top: 25px; }
+    .ejemplo-box { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    ol { padding-left: 20px; }
+    li { margin-bottom: 12px; }
+    code { background: #272822; color: #f8f8f2; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
+    
+    /* Estilo del editor idéntico a tus actividades anteriores */
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin-top: 10px;
+    }
+
+    /* Colores de sintaxis */
+    .code-box .param { color: #a626a4; font-weight: bold; }   /* --title, --inputbox, --msgbox */
+    .code-box .str { color: #986801; }                       /* Cadenas de texto */
+    .code-box .var { color: #1b1e23; }                       /* Variables */
+    .code-box .sub { color: #50a14f; font-weight: bold; }    /* =$( */
+    .code-box .redir { color: #0184bc; }                     /* 3>&1 1>&2 2>&3 */
+    .code-box .kw { color: #e45649; font-weight: bold; }      /* if, then, else, fi */
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Actividad 3: Control de Errores y Validación ("Modo Pro")</h1>
+  <p>En las actividades anteriores logramos capturar datos con <code>--inputbox</code> y procesarlos. Ahora reforzaremos el script <code>menu_control.sh</code> para evitar que falle si el usuario deja campos vacíos o presiona Cancelar.</p>
+
+  <!-- CONTEXTO DE LA ACTIVIDAD -->
+  <div class="ejemplo-box">
+    <h3>🔍 El Problema a Resolver</h3>
+    <p>Abre tu script e intenta presionar <strong>&lt;Aceptar&gt;</strong> sin escribir nada dentro del <code>--inputbox</code> de la Opción 5 o 6. Verás que el programa intenta ejecutar la orden con una variable vacía, generando un mensaje de error o un comportamiento inesperado.</p>
+  </div>
+
+  <!-- CONSIGNA 1 CON SU EJEMPLO -->
+  <h2>1. Validación de Entradas Vacías</h2>
+  <p><strong>Consigna:</strong> Modifica la <strong>Opción 5</strong> (Saludo) y la <strong>Opción 6</strong> (Ping)[cite: 2] utilizando una estructura condicional. Si la variable no contiene ningún texto, el script debe mostrar una ventana de alerta advirtiendo el error y regresar al menú principal[cite: 1].</p>
+
+  <div class="ejemplo-box">
+    <h3>Ejemplo: Comprobación de variable vacía con -z</h3>
+    <p>Usa este patrón genérico para verificar si una variable no tiene contenido antes de continuar:</p>
+    
+    <div class="code-box"><span class="kw">if</span> [ -z <span class="str">"$DATO"</span> ]; <span class="kw">then</span>
+    whiptail <span class="param">--title</span> <span class="str">"Error"</span> <span class="param">--msgbox</span> <span class="str">"No ingresaste ningún dato o cancelaste la operación."</span> 10 50
+<span class="kw">else</span>
+    COMANDO<span class="sub">=$(</span>comando <span class="str">"$DATO"</span>)
+    whiptail <span class="param">--title</span> <span class="str">"Respuesta"</span> <span class="param">--msgbox</span> <span class="str">"Resultado: $COMANDO"</span> 10 50
+<span class="kw">fi</span></div>
+  </div>
+
+  <!-- CONSIGNA 2 CON SU EJEMPLO -->
+  <h2>2. Personalización de Mensajes de Error</h2>
+  <p><strong>Consigna:</strong> Asegúrate de que el mensaje dentro del <code>--msgbox</code> de error sea específico según la opción donde se produjo el fallo (ejemplo: <em>"Debe ingresar un nombre válido"</em> para la Opción 5, o <em>"Debe ingresar una IP o dominio para realizar el ping"</em> para la Opción 6[cite: 2]).</p>
+
+</div>
+
+</body>
+</html>

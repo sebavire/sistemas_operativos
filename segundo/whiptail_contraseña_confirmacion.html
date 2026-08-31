@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actividad: Autenticación y Confirmación</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 10px; }
+    
+    .alerta { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .advertencia { background: #fff8e1; border-left: 5px solid #ffc107; padding: 12px 15px; margin: 15px 0; border-radius: 4px; font-weight: bold; }
+    
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 10px 0 20px 0;
+    }
+
+    .code-box .param { color: #a626a4; font-weight: bold; }
+    .code-box .str { color: #986801; }
+    .code-box .var { color: #1b1e23; }
+    .code-box .sub { color: #50a14f; font-weight: bold; }
+    .code-box .redir { color: #0184bc; }
+    .code-box .kw { color: #e45649; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Control de Acceso y Confirmación</h1>
+  
+  <div class="alerta">
+    <strong>Actividad:</strong> Crea un archivo llamado <code>seguridad.sh</code>. Aprenderemos a capturar contraseñas y condicionar acciones con ventanas de confirmación.
+  </div>
+
+  <!-- PARTE 1 -->
+  <h2>PARTE 1: Autenticación con Contraseña (--passwordbox)</h2>
+  <p><strong>Consigna:</strong> Al iniciar <code>seguridad.sh</code>, solicita una clave mediante <code>--passwordbox</code>. Si la contraseña ingresada es igual a <code>admin123</code>, muestra una ventana <code>--msgbox</code> informando que el acceso fue concedido. De lo contrario, muestra un mensaje de error y finaliza el programa.</p>
+  
+  <p><em>Sintaxis de referencia (Captura oculta y comparación de texto):</em></p>
+  <div class="code-box">DATO_OCULTO<span class="sub">=$(</span>whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--passwordbox</span> <span class="str">"Mensaje:"</span> 10 50 <span class="redir">3>&amp;1 1>&amp;2 2>&amp;3</span>)
+
+<span class="kw">if</span> [[ <span class="str">"$DATO_OCULTO"</span> == <span class="str">"palabra_clave"</span> ]]; <span class="kw">then</span>
+    <span class="var"># ... Acciones si la clave coincide ...</span>
+<span class="kw">else</span>
+    <span class="var"># ... Mensaje de error con --msgbox ...</span>
+<span class="kw">fi</span></div>
+
+  <div class="advertencia">
+    Prueba tu script. Antes de continuar a la Parte 2, dale permisos de ejecución (<code>chmod 700 seguridad.sh</code>) y verifica que valide correctamente la clave.
+  </div>
+
+  <!-- PARTE 2 -->
+  <h2>PARTE 2: Confirmación de Acción (--yesno)</h2>
+  <p><strong>Consigna:</strong> Únicamente si la contraseña fue correcta, el script debe preguntar mediante una ventana <code>--yesno</code> si el usuario desea consultar la fecha y hora del sistema. Si responde <strong>Sí</strong>, ejecuta el comando <code>date</code> y muestra su salida dentro de un <code>--msgbox</code>. Si responde <strong>No</strong>, muestra un aviso de operación cancelada.</p>
+  
+  <p><em>Sintaxis de referencia (Evaluación de respuesta Yes/No):</em></p>
+  <div class="code-box"><span class="kw">if</span> whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--yesno</span> <span class="str">"¿Pregunta?"</span> 10 50; <span class="kw">then</span>
+    <span class="var"># ... Código a ejecutar si presiona SÍ ...</span>
+<span class="kw">else</span>
+    <span class="var"># ... Código a ejecutar si presiona NO ...</span>
+<span class="kw">fi</span></div>
+
+</div>
+
+</body>
+</html>
