@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad: Monitoreo y Diagnóstico del Servidor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 25px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        hr {
+            margin: 25px 0;
+            border: 1px solid #ddd;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 12px;
+        }
+        .reto {
+            background: #eef2f7;
+            border-left: 5px solid #1e5a7a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .alerta-error {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            color: #721c24;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 8px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🖥️ Actividad: Monitoreo, Diagnóstico y Automatización Segura</h1>
+
+    <p><strong>Escenario:</strong> Como administrador de sistemas, tienes que controlar la salud del servidor: verificar que no se quede sin disco, monitorear los procesos que consumen recursos y programar tareas automáticas de forma segura sin colapsar el sistema.</p>
+
+    <hr>
+
+    <h2>Parte 1: Diagnóstico de Almacenamiento en Disco</h2>
+
+    <div class="reto">
+        <h3>📋 Paso 1: Inspeccionar el uso general del disco</h3>
+        <p>Ejecuta el comando para ver el estado general del almacenamiento en el sistema:</p>
+        <div class="code-box">df -h</div>
+        
+        <div class="pregunta">
+            ✍️ <strong>Observá la pantalla y respondé:</strong>
+            <ul>
+                <li>Ubicá la fila que en <i>Montado en</i> dice <code>/</code> (la raíz). ¿Qué porcentaje de uso (<code>Uso%</code>) tiene actualmente?</li>
+                <li>¿Cuánto espacio libre (<code>Disp</code>) le queda al disco del servidor?</li>
+            </ul>
+            <img src="imagenes_monitoreo/df-h.png" alt="Ejemplo de salida del comando df -h" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px; margin-top: 10px;">
+        </div>
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 2: Rastrear qué carpeta consume más espacio</h3>
+        <p>Para ver el tamaño de cada carpeta dentro del sitio web sin llenar la pantalla de datos, ejecutá:</p>
+        <div class="code-box">du -sh /var/www/html/*</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Analizá la salida:</strong><br>
+            ¿Cuál es la carpeta que más espacio ocupa en este momento? Anotá su tamaño en megabytes o gigabytes (ej: <code>25M</code> o <code>2G</code>).
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Parte 2: Monitoreo del Servidor en Tiempo Real</h2>
+
+    <div class="reto">
+        <h3>📋 Paso 3: Identificar consumo de Procesador (CPU) y Memoria</h3>
+        <p>Ejecutá la herramienta de monitoreo en vivo:</p>
+        <div class="code-box">htop</div>
+        <i>(Si el comando no está disponible, usá <code>top</code>. Para salir de la pantalla presioná la tecla <b>q</b>).</i>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde observando la parte superior:</strong>
+            <ul>
+                <li>¿Qué porcentaje aproximado de Memoria RAM se está utilizando?</li>
+                <li>Ubicá la columna <code>COMMAND</code> en la lista de abajo: ¿Ves algún proceso relacionado con el servidor web (<code>httpd</code> o <code>apache2</code>)?</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Parte 3: Automatización Segura con Cron</h2>
+
+    <div class="alerta-error">
+        ⚠️ <strong>Regla de Oro de los Resguardos:</strong> NUNCA guardes un archivo de respaldo dentro del mismo directorio que estás respaldando. Si lo hacés, el respaldo incluirá los respaldos anteriores y el tamaño crecerá infinitamente hasta llenar el servidor.
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 4: Programar una tarea automatizada (Cron)</h3>
+        <p>Vas a programar un comando para que guarde la fecha y hora actual dentro de un archivo de registro en tu directorio personal.</p>
+        
+        <ol>
+            <li>Abrí el editor de tareas programadas de tu usuario:
+                <br><div class="code-box">crontab -e</div>
+            </li>
+            <li>Al final del archivo, agregá la siguiente línea para que se ejecute cada 1 minuto:
+                <br><div class="code-box">* * * * * date >> ~/mi_registro.txt</div>
+            </li>
+            <li>Guardá los cambios y salí del editor.</li>
+            <li>Esperá un par de minutos y verificá que el archivo se esté llenando automáticamente ejecutando:
+                <br><div class="code-box">cat ~/mi_registro.txt</div>
+            </li>
+            <li><strong>Paso final importante:</strong> Volvé a entrar con <code>crontab -e</code> y borrá la línea (o ponele un <code>#</code> adelante) para detener la tarea.</li>
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesos y Gestión de Puertos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 25px;
+            border-left: 6px solid #1e5a7a;
+            padding-left: 12px;
+        }
+        hr {
+            margin: 25px 0;
+            border: 1px solid #ddd;
+        }
+        ol, ul {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .esquema-container {
+            background-color: #eef2f7;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .ip-box {
+            background-color: #0b3b5c;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+        .puertos-grid {
+            display: flex;
+            gap: 15px;
+        }
+        .puerto-card {
+            flex: 1;
+            background: white;
+            border: 2px solid #1e5a7a;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+        .puerto-numero {
+            font-weight: bold;
+            color: #1e5a7a;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        .reto {
+            background: #f8f9fa;
+            border-left: 5px solid #1e5a7a;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 6px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🔌 Procesos y Gestión de Puertos</h1>
+
+    <p><strong>Objetivo:</strong> Identificar procesos activos en el servidor Rocky Linux, generar un conflicto de puertos en tiempo real y desplegar múltiples servicios web en puertos alternativos.</p>
+
+    <hr>
+
+    <h2>🧠 Concepto Clave: Identificación por IP y Puerto</h2>
+    
+    <p>Un servidor identifica sus servicios mediante la combinación de su <strong>Dirección IP</strong> y un <strong>Número de Puerto</strong>. No pueden existir dos programas escuchando en el mismo puerto al mismo tiempo.</p>
+
+    <div class="esquema-container">
+        <div class="ip-box">🖥️ Servidor Rocky Linux</div>
+        <div class="puertos-grid">
+            <div class="puerto-card">
+                <div class="puerto-numero">Puerto 22</div>
+                <div>Servicio de acceso remoto (sshd)</div>
+            </div>
+            <div class="puerto-card">
+                <div class="puerto-numero">Puerto 80</div>
+                <div>Servidor web principal (httpd)</div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Parte 1: Inspección de Procesos Activos</h2>
+
+    <div class="reto">
+        <h3>📋 Paso 1: Analizar el servicio Apache (httpd)</h3>
+        <p>Ejecuta la combinación de comandos para conservar la línea de encabezados y filtrar los procesos del servidor web:</p>
+        <div class="code-box">ps -ef | head -n 1; ps -ef | grep httpd</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde a partir de la salida en pantalla:</strong>
+            <ul>
+                <li>Anotá el número de <code>PID</code> correspondiente al proceso principal de <code>httpd</code> (el que pertenece al usuario <code>root</code>).</li>
+                <li>¿Qué usuario aparece ejecutando los procesos secundarios o "hijos" en las líneas inferiores?</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Parte 2: Mapeo de Puertos de Red</h2>
+
+    <div class="reto">
+        <h3>📋 Paso 2: Auditar los puertos en escucha</h3>
+        <p>Ejecuta el comando para verificar qué servicios están aceptando conexiones en la red:</p>
+        <div class="code-box">ss -tulpn</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde observando la tabla:</strong>
+            <ul>
+                <li>En la columna <i>Local Address:Port</i>, ubica la entrada correspondiente al puerto <code>:80</code>. ¿Qué proceso figura al final de la línea en la columna <i>Users</i>?</li>
+                <li>¿Qué puerto está utilizando el proceso <code>sshd</code>?</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Parte 3: Simulación y Asignación de Puertos Web</h2>
+
+    <p>Vas a intentar levantar un servidor web alternativo utilizando el módulo HTTP integrado de Python.</p>
+
+    <div class="reto">
+        <h3>📋 Paso 3.1: Provocar el conflicto en el puerto 80</h3>
+        <p>Intenta iniciar un servidor de Python asignándole el puerto 80 (necesitas permisos de superusuario):</p>
+        <div class="code-box">sudo python3 -m http.server 80</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde:</strong>
+            <ul>
+                <li>Escribe el texto exacto del error que devuelve la terminal en la última línea.</li>
+                <li>A partir de lo visto en la Parte 2, explica por qué falla la ejecución.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 3.2: Buscar y asignar un puerto libre</h3>
+        <p>Como el puerto 80 está ocupado, debemos buscar un puerto disponible. Evaluaremos la serie a partir del puerto 8080 (8080, 8081, 8082, etc.).</p>
+        
+        <p>1. Revisa qué puertos de esta serie ya están siendo utilizados por otros compañeros:</p>
+        <div class="code-box">ss -tulpn | grep ':808'</div>
+
+        <p>2. Elige el primer puerto de la lista que esté completamente **DESOCUPADO** y levanta tu servidor (reemplaza <code>PUERTO_ELEGIDO</code> por tu número, por ejemplo <code>8081</code>):</p>
+        <div class="code-box">sudo python3 -m http.server PUERTO_ELEGIDO</div>
+        <p><i>Nota: La terminal quedará "bloqueada" mostrando que el servidor está activo. No cierres esta ventana.</i></p>
+
+        <div class="pregunta">
+            ✍️ <strong>Registro de asignación:</strong>
+            <ul>
+                <li>Anota el número de puerto desocupado que elegiste para tu servidor: _________</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 3.3: Verificación remota en segunda terminal</h3>
+        <p>Abre una <strong>segunda pestaña o ventana de terminal</strong> en tu máquina y realiza las siguientes comprobaciones usando el puerto que registraste recién:</p>
+
+        <p>1. Verifica que tu puerto aparece escuchando en la tabla del sistema:</p>
+        <div class="code-box">ss -tulpn | grep ':PUERTO_ELEGIDO'</div>
+
+        <p>2. Consulta las respuestas de ambos servidores web para comparar:</p>
+        <div class="code-box">curl -I http://localhost/</div>
+        <div class="code-box">curl -I http://localhost:PUERTO_ELEGIDO/</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde:</strong>
+            <ul>
+                <li>Al ejecutar <code>ss -tulpn</code>, ¿qué programa aparece asociado a tu puerto? Anota también su número de <code>PID</code>.</li>
+                <li>Compara las respuestas del comando <code>curl</code>: ¿Qué valor tiene la cabecera <code>Server:</code> en el puerto 80 (Apache) y cuál en tu puerto asignado (Python)?</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="reto">
+        <h3>📋 Paso 3.4: Finalización del proceso</h3>
+        <p>Desde la segunda terminal, detén el servidor que levantaste utilizando el número de PID que anotaste recién:</p>
+        <div class="code-box">sudo kill -9 NUMERO_PID</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Comprobación final:</strong>
+            <ul>
+                <li>¿Qué sucedió en la primera pestaña de la terminal donde estaba corriendo tu servidor de Python?</li>
+                <li>Ejecuta <code>ss -tulpn | grep ':PUERTO_ELEGIDO'</code> una vez más. ¿Sigue figurando tu puerto en la lista?</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
