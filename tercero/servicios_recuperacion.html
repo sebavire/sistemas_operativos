@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío: Auditoría y Reinicio de Servicio Web</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 20px;
+            border-left: 5px solid #1e5a7a;
+            padding-left: 10px;
+        }
+        hr {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .reto {
+            background: #f8f9fa;
+            border-left: 5px solid #1e5a7a;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 4px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🔍 Desafío: Auditoría y Reinicio de Servicio Web</h1>
+
+    <p><strong>Escenario:</strong> Un proceso web no autorizado o antiguo está ocupando tu puerto personal asignado. Tu objetivo como administrador es auditar el puerto, identificar el identificador de proceso (PID), finalizarlo y desplegar tu propia instancia limpia del servicio.</p>
+
+    <hr>
+
+    <h2>Paso 1: Auditar el Puerto Ocupado</h2>
+
+    <div class="reto">
+        <p>1. Ejecuta el filtro en la tabla de puertos usando tu número asignado (reemplaza <code>PUERTO</code> por el tuyo, ej: 8081):</p>
+        <div class="code-box">sudo ss -tulpn | grep ':PUERTO'</div>
+
+        <p>2. Comprueba que el servicio actual responde a la red:</p>
+        <div class="code-box">curl -I http://localhost:PUERTO/</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde a partir de la salida en pantalla:</strong>
+            <ul>
+                <li>¿Qué número figura dentro del paréntesis en la columna <b>Process</b> al final de la línea del comando <code>ss</code>? Anota ese número de <code>PID</code>: _________</li>
+                <li>¿Qué código de estado HTTP devuelve el comando <code>curl</code> en su primera línea?</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Paso 2: Finalizar el Proceso Previo</h2>
+
+    <div class="reto">
+        <p>1. Envía la señal de terminación inmediata al proceso utilizando el PID que anotaste en el Paso 1:</p>
+        <div class="code-box">sudo kill -9 PID_ANOTADO</div>
+
+        <p>2. Verifica que el puerto quedó liberado:</p>
+        <div class="code-box">sudo ss -tulpn | grep ':PUERTO'</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Comprobación de Liberación:</strong><br>
+            ¿Qué devuelve la terminal al ejecutar de nuevo el comando <code>ss</code> tras aplicar el <code>kill</code>?
+        </div>
+    </div>
+
+    <h2>Paso 3: Desplegar tu Servidor Limpio</h2>
+
+    <div class="reto">
+        <p>1. Inicia tu propia instancia del servidor web en tu puerto asignado, enviándolo al segundo plano mediante el símbolo <code>&amp;</code>:</p>
+        <div class="code-box">python3 -m http.server PUERTO &amp;</div>
+
+        <p>2. Confirma la conectividad con tu nuevo servicio:</p>
+        <div class="code-box">curl -I http://localhost:PUERTO/</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Comprobación Final:</strong>
+            <ul>
+                <li>Al presionar Enter tras el comando de Python, la terminal muestra un número entre corchetes <code>[1]</code> seguido de un número. ¿Cuál es el nuevo <code>PID</code> de tu servicio?</li>
+                <li>¿Qué respuesta obtienes con el comando <code>curl</code> final?</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
