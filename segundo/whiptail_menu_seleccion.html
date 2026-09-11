@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práctico: Selección Única y Múltiple en Whiptail</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 10px; }
+    
+    .alerta { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .advertencia { background: #fff8e1; border-left: 5px solid #ffc107; padding: 12px 15px; margin: 15px 0; border-radius: 4px; font-weight: bold; }
+    
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 10px 0 20px 0;
+    }
+
+    .code-box .param { color: #a626a4; font-weight: bold; }
+    .code-box .str { color: #986801; }
+    .code-box .var { color: #1b1e23; }
+    .code-box .sub { color: #50a14f; font-weight: bold; }
+    .code-box .redir { color: #0184bc; }
+    .code-box .kw { color: #e45649; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Práctico: Selección de Opciones y Tareas Múltiples</h1>
+  
+  <div class="alerta">
+    <strong>Nuevo proyecto:</strong> Crea un archivo nuevo llamado <code>config_servidor.sh</code>. Aprenderemos a usar listas de selección única (radio buttons) y selección múltiple (checkboxes). Las ventanas se mostrarán en secuencia: primero la Parte 1 y, al finalizar esta, la Parte 2.
+  </div>
+
+  <!-- PARTE 1 -->
+  <h2>PARTE 1: Selección Única con Radiolist (--radiolist)</h2>
+  <p><strong>Consigna:</strong> Al iniciar el script, presenta un menú <code>--radiolist</code> donde el usuario solo pueda elegir <strong>una</strong> de las siguientes opciones para consultar el servidor:</p>
+  <ul>
+    <li><strong>Opción 1 - Espacio en disco:</strong> Usa el comando <code>df -h /</code></li>
+    <li><strong>Opción 2 - Memoria RAM:</strong> Usa el comando <code>free -h</code></li>
+    <li><strong>Opción 3 - Conectividad de red:</strong> Usa el comando <code>ping -c 4 google.com</code></li>
+  </ul>
+  <p>Guarda la selección en una variable, evalúala con una estructura <code>case</code> y muestra el resultado del comando en un <code>--msgbox</code>.</p>
+  
+  <p><em>Sintaxis de referencia (Creación y evaluación de un Radiolist numérico):</em></p>
+  <div class="code-box">OPCION<span class="sub">=$(</span>whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--radiolist</span> <span class="str">"Seleccione una alternativa:"</span> 15 60 3 \
+<span class="str">"1"</span> <span class="str">"Descripción de opción 1"</span> ON \
+<span class="str">"2"</span> <span class="str">"Descripción de opción 2"</span> OFF \
+<span class="str">"3"</span> <span class="str">"Descripción de opción 3"</span> OFF <span class="redir">3>&amp;1 1>&amp;2 2>&amp;3</span>)
+
+<span class="kw">case</span> <span class="str">"$OPCION"</span> <span class="kw">in</span>
+    <span class="str">"1"</span>)
+        RESULTADO<span class="sub">=$(</span>comando1)
+        whiptail <span class="param">--title</span> <span class="str">"Resultado"</span> <span class="param">--msgbox</span> <span class="str">"$RESULTADO"</span> 12 60
+        ;;
+    <span class="str">"2"</span>)
+        RESULTADO<span class="sub">=$(</span>comando2)
+        whiptail <span class="param">--title</span> <span class="str">"Resultado"</span> <span class="param">--msgbox</span> <span class="str">"$RESULTADO"</span> 12 60
+        ;;
+<span class="kw">esac</span></div>
+
+  <div class="advertencia">
+    Prueba tu script. Otorga permisos (<code>chmod 700 config_servidor.sh</code>) y verifica que la opción elegida ejecute su comando correspondiente antes de pasar a la Parte 2.
+  </div>
+
+  <!-- PARTE 2 -->
+  <h2>PARTE 2: Selección Múltiple con Checklist (--checklist)</h2>
+  <p><strong>Consigna:</strong> A continuación de la Parte 1, agrega un cuadro <code>--checklist</code> que permita al usuario marcar <strong>una o varias</strong> tareas de diagnóstico simultáneamente usando la barra espaciadora:</p>
+  <ul>
+    <li><strong>Opción 1 - Usuarios conectados:</strong> Usa el comando <code>who</code></li>
+    <li><strong>Opción 2 - Nombre del equipo:</strong> Usa el comando <code>hostname</code></li>
+    <li><strong>Opción 3 - Tiempo activo:</strong> Usa el comando <code>uptime</code></li>
+  </ul>
+  <p>Evalúa qué casillas fueron marcadas buscando el número correspondiente dentro de la variable devuelta y muestra los resultados en ventanas <code>--msgbox</code>.</p>
+  
+  <p><em>Sintaxis de referencia (Creación y evaluación de un Checklist numérico):</em></p>
+  <div class="code-box">SELECCIONADOS<span class="sub">=$(</span>whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--checklist</span> <span class="str">"Marque las opciones necesarias con Espacio:"</span> 15 60 3 \
+<span class="str">"1"</span> <span class="str">"Descripción de opción 1"</span> OFF \
+<span class="str">"2"</span> <span class="str">"Descripción de opción 2"</span> OFF \
+<span class="str">"3"</span> <span class="str">"Descripción de opción 3"</span> OFF <span class="redir">3>&amp;1 1>&amp;2 2>&amp;3</span>)
+
+<span class="var"># Para verificar si una opción fue marcada, se busca el número dentro de la variable:</span>
+<span class="kw">if</span> [[ <span class="str">"$SELECCIONADOS"</span> == *<span class="str">"1"</span>* ]]; <span class="kw">then</span>
+    RES1<span class="sub">=$(</span>comando1)
+    whiptail <span class="param">--title</span> <span class="str">"Opción 1"</span> <span class="param">--msgbox</span> <span class="str">"$RES1"</span> 10 50
+<span class="kw">fi</span>
+
+<span class="kw">if</span> [[ <span class="str">"$SELECCIONADOS"</span> == *<span class="str">"2"</span>* ]]; <span class="kw">then</span>
+    RES2<span class="sub">=$(</span>comando2)
+    whiptail <span class="param">--title</span> <span class="str">"Opción 2"</span> <span class="param">--msgbox</span> <span class="str">"$RES2"</span> 10 50
+<span class="kw">fi</span></div>
+
+</div>
+
+</body>
+</html>

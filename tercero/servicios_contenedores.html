@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica: Introducción a Contenedores con Podman</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 20px;
+            border-left: 5px solid #1e5a7a;
+            padding-left: 10px;
+        }
+        hr {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .concepto {
+            background-color: #eef6fb;
+            border: 1px solid #cbd5e1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .diagrama-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            font-family: sans-serif;
+            font-size: 0.9em;
+        }
+        .caja {
+            border: 2px solid #0b3b5c;
+            border-radius: 8px;
+            padding: 12px 18px;
+            background: #ffffff;
+            text-align: center;
+        }
+        .caja-contenedor {
+            border: 2px dashed #059669;
+            background: #ecfdf5;
+        }
+        .flecha {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .reto {
+            background: #f8f9fa;
+            border-left: 5px solid #1e5a7a;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 4px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🐳 Práctica: Publicación de Servicios con Contenedores</h1>
+
+    <div class="concepto">
+        <h3 style="margin-top:0; color: #0b3b5c;">💡 ¿Qué es un Contenedor y para qué sirve?</h3>
+        <p>Un <b>contenedor</b> es un entorno aislado que empaqueta una aplicación completa (en este caso, un servidor web Nginx) junto con todas sus dependencias. Esto permite ejecutar servicios independientes sin modificar el sistema operativo base del servidor.</p>
+        <p>Para acceder al servicio web que se ejecuta dentro del contenedor, se enlaza el puerto personal asignado en el servidor real hacia la aplicación en el contenedor:</p>
+        
+        <div class="diagrama-container">
+            <div class="caja">
+                <strong>Servidor Rocky Linux</strong><br>
+                <small>(Sistema Operativo Base)</small><br><br>
+                <span style="color:#d97706; font-weight:bold;">Puerto del Servidor</span><br>
+                <code>(ej: 8082)</code>
+            </div>
+
+            <div class="flecha"> ── Enlaza a ──► </div>
+
+            <div class="caja caja-contenedor">
+                <strong>📦 CONTENEDOR</strong><br>
+                <small>(Entorno Aislado)</small><br><br>
+                <strong>Servidor Web (Nginx)</strong><br>
+                <code>Aplicación Web Lista</code>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Paso 1: Desplegar el Contenedor</h2>
+
+    <div class="reto">
+        <p>1. Ejecuta el comando para encender el contenedor Nginx (reemplaza <code>PUERTO</code> por el número asignado, ej: 8082):</p>
+        <div class="code-box">podman run -d -p PUERTO:80 --name mi_web_PUERTO nginx</div>
+
+        <div class="pregunta">
+            📷 <strong>Entregable 1:</strong> Captura de pantalla de la terminal tras ejecutar el comando anterior.
+        </div>
+    </div>
+
+    <h2>Paso 2: Auditar el Servicio Nginx</h2>
+
+    <div class="reto">
+        <p>1. Verifica la tabla de puertos en el servidor:</p>
+        <div class="code-box">sudo ss -tulpn | grep ':PUERTO'</div>
+
+        <p>2. Consulta las cabeceras HTTP que responde el contenedor:</p>
+        <div class="code-box">curl -I http://localhost:PUERTO/</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Responde a partir de la salida del comando <code>curl</code>:</strong>
+            <ul>
+                <li>¿Qué texto figura en la línea <code>Server:</code>?</li>
+            </ul>
+            📷 <strong>Entregable 2:</strong> Captura de pantalla con el resultado del comando <code>curl</code> funcionando.
+        </div>
+    </div>
+
+    <h2>Paso 3: Detener y Eliminar el Contenedor</h2>
+
+    <div class="reto">
+        <p>1. Detén la ejecución del contenedor:</p>
+        <div class="code-box">podman stop mi_web_PUERTO</div>
+
+        <p>2. Elimina el contenedor del sistema:</p>
+        <div class="code-box">podman rm mi_web_PUERTO</div>
+
+        <div class="pregunta">
+            ✍️ <strong>Comprobación final:</strong><br>
+            Ejecuta nuevamente <code>sudo ss -tulpn | grep ':PUERTO'</code>. Comprueba que el puerto asignado volvió a quedar libre.
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
