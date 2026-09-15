@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práctico: Actividad de Extensión</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 10px; }
+    
+    .alerta { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .destacado { background: #e8f8f5; border-left: 5px solid #2ecc71; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 10px 0 20px 0;
+    }
+
+    .code-box .param { color: #a626a4; font-weight: bold; }
+    .code-box .str { color: #986801; }
+    .code-box .var { color: #1b1e23; }
+    .code-box .sub { color: #50a14f; font-weight: bold; }
+    .code-box .redir { color: #0184bc; }
+    .code-box .kw { color: #e45649; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Actividad de Extensión: Refactorización del Reportador</h1>
+  
+  <div class="alerta">
+    Si ya terminaste y probaste la versión básica de <code>config_servidor.sh</code>, realiza las siguientes modificaciones en el código para mejorar el flujo del programa y la visualización de los datos.
+  </div>
+
+  <!-- REQUISITO 1 -->
+  <h2>1. Bucle de Ejecución Continuo y Opción de Salida</h2>
+  <p><strong>Consigna:</strong> Modifica la estructura de tu script para que no finalice automáticamente tras ejecutar un comando. Debe mantenerse en bucle (usando <code>while true</code>) mostrando los menús hasta que el usuario elija explícitamente la opción de finalizar.</p>
+  <ul>
+    <li>Agrega la <strong>Opción 4: "Salir del programa"</strong> tanto en la Parte 1 (<code>--radiolist</code>) como en la Parte 2 (<code>--checklist</code>).</li>
+    <li>Si el usuario selecciona la opción 4 o presiona Cancelar, el script debe ejecutar la instrucción <code>break</code> o <code>exit</code> para cerrar de forma limpia.</li>
+  </ul>
+
+  <!-- REQUISITO 2 -->
+  <h2>2. Implementación de Visor Navegable (--textbox)</h2>
+  <p><strong>Consigna:</strong> Las ventanas <code>--msgbox</code> se quedan cortas cuando un comando genera muchas líneas de texto. Sustituye todos los <code>--msgbox</code> por ventanas <code>--textbox</code>.</p>
+  
+  <div class="destacado">
+    💡 <strong>A tener en cuenta:</strong> La caja <code>--textbox</code> no admite variables directamente; exige la ruta de un archivo real almacenado en el disco.
+  </div>
+
+  <p>Para lograrlo, debes redirigir la salida del comando de Linux a un archivo temporal dentro del directorio <code>/tmp</code> y luego invocar el visor apuntando a ese archivo.</p>
+
+  <p><em>Sintaxis de referencia (Redirección a archivo y lectura con textbox):</em></p>
+  <div class="code-box"><span class="var"># 1. Se guarda la salida del comando en un archivo temporal con ></span>
+comando > /tmp/reporte.txt
+
+<span class="var"># 2. Se muestra el archivo usando --textbox (permite desplazar con flechas)</span>
+whiptail <span class="param">--title</span> <span class="str">"Visor de Salida"</span> <span class="param">--textbox</span> /tmp/reporte.txt 15 70</div>
+
+  <!-- REQUISITO 3 -->
+  <h2>3. Limpieza de Archivos Temporales</h2>
+  <p><strong>Consigna:</strong> Asegúrate de incluir la eliminación del archivo temporal (usando <code>rm -f /tmp/reporte.txt</code>) justo antes de que el programa finalice por completo, para evitar acumular archivos innecesarios en la carpeta <code>/tmp</code>.</p>
+
+</div>
+
+</body>
+</html>
