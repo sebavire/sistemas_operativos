@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicación Web Personalizada en un Contenedor Podman</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 20px;
+            border-left: 5px solid #1e5a7a;
+            padding-left: 10px;
+        }
+        hr {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .buscador-box {
+            background-color: #e0f2fe;
+            border: 2px solid #0284c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .buscador-box input {
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+        .buscador-box button {
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .buscador-box button:hover {
+            background-color: #0369a1;
+        }
+        #resultadoPuerto {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #0f172a;
+        }
+        .reto {
+            background: #f8f9fa;
+            border-left: 5px solid #1e5a7a;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 6px 0;
+            display: inline-block;
+        }
+        .highlight {
+            color: #f92672;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🌐 Publicación Web Personalizada en un Contenedor Podman</h1>
+
+    <!-- Módulo de consulta de puerto -->
+    <div class="buscador-box">
+        <h3>🔍 Consulta tu Puerto Asignado</h3>
+        <p>Escribe tu usuario del servidor para ver cuál es tu puerto asignado:</p>
+        <input type="text" id="usuarioInput" placeholder="usuario del servidor">
+        <button onclick="buscarPuerto()">Consultar</button>
+        <div id="resultadoPuerto"></div>
+    </div>
+
+    <hr>
+
+    <h2>Paso 1: Auditar y Limpiar el Puerto</h2>
+    <div class="reto">
+        <p>Antes de arrancar, debes comprobar si tu puerto está ocupado por algún servicio o prueba anterior.</p>
+        <p>1. Revisa el estado de tu puerto (reemplaza <code>PUERTO</code> por el número asignado):</p>
+        <div class="code-box">sudo ss -tulpn | grep ':PUERTO'</div>
+        
+        <p>2. Si la consulta devuelve algún proceso activo en ese puerto, libéralo inmediatamente ejecutando:</p>
+        <div class="code-box">sudo fuser -k PUERTO/tcp</div>
+
+        <p>3. Vuelve a ejecutar la comprobación para asegurarte de que tu puerto quedó totalmente desocupado.</p>
+    </div>
+
+    <h2>Paso 2: Crear la Carpeta y tu Sitio Web en el Servidor</h2>
+    <div class="reto">
+        <p>1. En tu carpeta de usuario dentro del servidor, crea un directorio llamado <code>web_podman</code>.</p>
+        <p>2. Dentro de la carpeta <code>web_podman</code>, crea un archivo llamado <code>index.html</code>.</p>
+        <p>3. Edita el archivo <code>index.html</code> e incluye un título principal (<code>&lt;h1&gt;</code>) que contenga tu nombre y el número de puerto que te corresponde.</p>
+    </div>
+
+    <h2>Paso 3: Encender el Contenedor para Publicar tu Web</h2>
+    <div class="reto">
+        <p>Para publicar tu página web usando Podman, debes ejecutar el siguiente comando modificando <strong>dos datos</strong>:</p>
+        <ul>
+            <li>Cambia <span class="highlight">PUERTO</span> por el número asignado a tu usuario.</li>
+            <li>Asegúrate de poner la ruta correcta a tu carpeta <span class="highlight">/home/TU_USUARIO/web_podman</span>.</li>
+        </ul>
+
+        <div class="code-box">podman run -d -p <span class="highlight">PUERTO</span>:80 --name mi_web -v <span class="highlight">/home/TU_USUARIO/web_podman</span>:/usr/share/nginx/html:Z nginx</div>
+
+        <div class="pregunta">
+            📷 <strong>Entregable 1:</strong> Captura de pantalla de la terminal mostrando la ejecución del comando.
+        </div>
+    </div>
+
+    <h2>Paso 4: Verificación en el Navegador</h2>
+    <div class="reto">
+        <p>1. Prueba primero desde la consola enviando una petición local:</p>
+        <div class="code-box">curl http://localhost:PUERTO/</div>
+
+        <p>2. Abre el navegador web en tu computadora e ingresa la IP del servidor junto con tu puerto:</p>
+        <div class="code-box">http://IP_DEL_SERVIDOR:PUERTO/</div>
+
+        <div class="pregunta">
+            📷 <strong>Entregable 2:</strong> Captura de pantalla del navegador cargando con éxito tu sitio web personalizado.
+        </div>
+    </div>
+
+    <h2>Paso 5: Modificación en Vivo del Sitio Web</h2>
+    <div class="reto">
+        <p>1. Edita nuevamente tu archivo <code>index.html</code> en el servidor agregando un párrafo (<code>&lt;p&gt;</code>) debajo del título principal con el siguiente texto de ejemplo:</p>
+        
+        <div class="code-box">&lt;p&gt;Página modificada en vivo mediante el volumen del contenedor Podman.&lt;/p&gt;</div>
+
+        <p>2. Guarda los cambios en el archivo y <strong>recarga la página en tu navegador web</strong> (presionando F5 o Ctrl+R).</p>
+
+        <div class="pregunta">
+            📷 <strong>Entregable 3:</strong> Captura de pantalla del navegador cargando con éxito tu sitio web personalizado.
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const usuarios = {
+        "adriano": 8082,
+        "dylan": 8083,
+        "emiliano": 8084,
+        "angelina": 8085,
+        "ezequiel": 8086,
+        "david_b": 8087,
+        "joaquin": 8088,
+        "eric": 8088,
+        "mateo": 8089,
+        "bautista": 8090,
+        "leandro": 8091,
+        "brandon": 8093,
+        "benjamin": 8093,
+        "fabricio": 8094,
+        "santino": 8096,
+        "alan": 8096,
+        "alex": 8096,
+        "melissa": 8097,
+        "david_m": 8098,
+        "valentina": 8098
+    };
+
+    function buscarPuerto() {
+        const input = document.getElementById("usuarioInput").value.trim().toLowerCase();
+        const divResultado = document.getElementById("resultadoPuerto");
+
+        if (usuarios[input]) {
+            divResultado.style.color = "#0369a1";
+            divResultado.innerHTML = `📌 El puerto asignado a <strong>${input}</strong> es: <span style="font-size: 1.3em; color: #d97706;">${usuarios[input]}</span>`;
+        } else if (input === "") {
+            divResultado.style.color = "#b91c1c";
+            divResultado.innerHTML = "Por favor, escribe un nombre de usuario.";
+        } else {
+            divResultado.style.color = "#b91c1c";
+            divResultado.innerHTML = "❌ Usuario no encontrado. Revisa si está bien escrito.";
+        }
+    }
+</script>
+
+</body>
+</html>
