@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modularización con Funciones</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 10px; }
+    
+    .alerta { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .advertencia { background: #fff8e1; border-left: 5px solid #ffc107; padding: 12px 15px; margin: 15px 0; border-radius: 4px; font-weight: bold; }
+    .destacado { background: #e8f8f5; border-left: 5px solid #2ecc71; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 10px 0 20px 0;
+    }
+
+    .code-box .param { color: #a626a4; font-weight: bold; }
+    .code-box .str { color: #986801; }
+    .code-box .var { color: #1b1e23; }
+    .code-box .sub { color: #50a14f; font-weight: bold; }
+    .code-box .redir { color: #0184bc; }
+    .code-box .kw { color: #e45649; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Desafío: Modularización con Funciones</h1>
+  
+  <div class="alerta">
+    <strong>Objetivo:</strong> Reorganizar el código de <code>config_servidor.sh</code> separando la lógica de ejecución en bloques independientes llamados <strong>funciones</strong>. Esto permitirá mantener un código limpio, legible y fácil de mantener.
+  </div>
+
+  <!-- REQUISITO 1 -->
+  <h2>1. Declaración de Funciones</h2>
+  <p><strong>Consigna:</strong> En la parte superior de tu script (antes de los menús y del bucle), define funciones específicas para cada tarea del sistema. Por ejemplo, crea una función para consultar el espacio en disco, otra para la memoria RAM y otra para la red.</p>
+  
+  <p>Cada función debe encargarse de ejecutar su comando, redirigir el resultado al archivo temporal y mostrar la ventana correspondientes.</p>
+
+  <p><em>Sintaxis de referencia (Declaración e invocación de una función):</em></p>
+  <div class="code-box"><span class="var"># 1. Declaración de la función (se define al inicio del script)</span>
+nombre_de_la_funcion() {
+    <span class="var"># Instrucciones a ejecutar</span>
+    comando > /tmp/reporte.txt
+    whiptail <span class="param">--title</span> <span class="str">"Título"</span> <span class="param">--textbox</span> /tmp/reporte.txt 15 70
+}
+
+<span class="var"># 2. Invocación de la función (se la llama por su nombre desde el case o if)</span>
+nombre_de_la_funcion</div>
+
+  <!-- REQUISITO 2 -->
+  <h2>2. Reestructuración del Menú (case / if)</h2>
+  <p><strong>Consigna:</strong> Modifica la evaluación de tus menús (<code>case</code> o condicionales <code>if</code>) para que no tengan comandos largos ni bloques directos de <code>whiptail</code> en su interior. En su lugar, cada opción simplemente debe <strong>llamar a la función correspondiente</strong>.</p>
+
+  <p><em>Sintaxis de referencia (Invocación desde un case):</em></p>
+  <div class="code-box"><span class="kw">case</span> <span class="str">"$OPCION"</span> <span class="kw">in</span>
+    <span class="str">"1"</span>)
+        nombre_de_la_funcion_1
+        ;;
+    <span class="str">"2"</span>)
+        nombre_de_la_funcion_2
+        ;;
+    <span class="str">"3"</span>)
+        <span class="kw">break</span>
+        ;;
+<span class="kw">esac</span></div>
+
+  <div class="destacado">
+    💡 <strong>Ventaja técnica:</strong> Las funciones deben definirse siempre en las primeras líneas del archivo para que Bash las reconozca antes de que el menú intente llamarlas.
+  </div>
+
+  <div class="advertencia">
+    ¡Prueba tu script! Verifica que al seleccionar cada opción del menú, la función se ejecute correctamente y muestre los datos esperados en la ventana.
+  </div>
+
+</div>
+
+</body>
+</html>
