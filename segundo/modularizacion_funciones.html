@@ -63,8 +63,24 @@ nombre_de_la_funcion() {
 <span class="var"># 2. Invocación de la función (se la llama por su nombre desde el case o if)</span>
 nombre_de_la_funcion</div>
 
-  <!-- REQUISITO 2 -->
-  <h2>2. Reestructuración del Menú (case / if)</h2>
+<!-- REQUISITO 2 -->
+  <h2>2. Función de Limpieza y Salida Segura</h2>
+  <p><strong>Consigna:</strong> Crea una función dedicada exclusivamente a cerrar el programa de forma limpia. Esta función debe realizar tres acciones ordenadas:</p>
+  <ul>
+    <li>Eliminar cualquier archivo temporal generado en <code>/tmp</code>.</li>
+    <li>Mostrar un cuadro de diálogo (<code>--msgbox</code>) despidiéndose del usuario.</li>
+    <li>Finalizar la ejecución del programa de forma definitiva (<code>exit 0</code>).</li>
+  </ul>
+
+  <p><em>Sintaxis de referencia (Estructura de la función de cierre):</em></p>
+  <div class="code-box">limpiar_y_salir() {
+    rm <span class="param">-f</span> /tmp/reporte.txt
+    whiptail <span class="param">--title</span> <span class="str">"Fin del programa"</span> <span class="param">--msgbox</span> <span class="str">"Cerrando sesión..."</span> 8 40
+    <span class="kw">exit</span> 0
+}</div>
+
+  <!-- REQUISITO 3 -->
+  <h2>3. Reestructuración del Menú (case / if)</h2>
   <p><strong>Consigna:</strong> Modifica la evaluación de tus menús (<code>case</code> o condicionales <code>if</code>) para que no tengan comandos largos ni bloques directos de <code>whiptail</code> en su interior. En su lugar, cada opción simplemente debe <strong>llamar a la función correspondiente</strong>.</p>
 
   <p><em>Sintaxis de referencia (Invocación desde un case):</em></p>

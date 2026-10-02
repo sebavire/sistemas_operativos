@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Datos MariaDB y phpMyAdmin con Podman</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 20px;
+            border-left: 5px solid #1e5a7a;
+            padding-left: 10px;
+        }
+        hr {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .buscador-box {
+            background-color: #e0f2fe;
+            border: 2px solid #0284c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .buscador-box input {
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+        .buscador-box button {
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .buscador-box button:hover {
+            background-color: #0369a1;
+        }
+        #resultadoPuerto {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #0f172a;
+        }
+        .concepto {
+            background-color: #eef6fb;
+            border: 1px solid #cbd5e1;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .diagrama {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.85em;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.2;
+        }
+        .reto {
+            background: #f8f9fa;
+            border-left: 5px solid #1e5a7a;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 6px 0;
+            display: inline-block;
+        }
+        .highlight {
+            color: #f92672;
+            font-weight: bold;
+        }
+        /* Diagrama con divs CSS */
+        .diagrama-css {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 20px;
+            color: #f8fafc;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .servidor-box {
+            border: 2px dashed #38bdf8;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            background: rgba(56, 189, 248, 0.03);
+        }
+        .servidor-titulo {
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: bold;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .contenedores-flex {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .caja-contenedor {
+            background: #1e293b;
+            border: 2px solid #0284c7;
+            border-radius: 6px;
+            padding: 12px;
+            width: 220px;
+            text-align: center;
+        }
+        .caja-contenedor strong {
+            display: block;
+            color: #38bdf8;
+            font-size: 1.05em;
+            margin-bottom: 4px;
+        }
+        .caja-contenedor small {
+            color: #94a3b8;
+        }
+        .flecha-red {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 0.85em;
+            padding: 20px 0;
+        }
+        .volumen-box {
+            margin-top: 15px;
+            background: #064e3b;
+            border: 1px solid #10b981;
+            color: #a7f3d0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .conexion-exterior {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #334155;
+            color: #f59e0b;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🛢️ Base de Datos (MariaDB) e Interfaz Web (phpMyAdmin)</h1>
+
+    <!-- Módulo de consulta de puerto -->
+    <div class="buscador-box">
+        <h3>🔍 Consulta tu Puerto Asignado</h3>
+        <p>Escribe tu usuario de Linux (o el de tu compañero si trabajan en pareja) para consultar tu puerto:</p>
+        <input type="text" id="usuarioInput" placeholder="Ej: adriano">
+        <button onclick="buscarPuerto()">Consultar</button>
+        <div id="resultadoPuerto"></div>
+    </div>
+
+    <div class="diagrama-css">
+            <div class="servidor-box">
+                <div class="servidor-titulo">ENTORNO DE USUARIO EN EL SERVIDOR</div>
+                
+                <div class="contenedores-flex">
+                    <!-- Contenedor phpMyAdmin -->
+                    <div class="caja-contenedor">
+                        <strong>📦 phpMyAdmin</strong>
+                        <small>Interfaz Web Gráfica</small>
+                    </div>
+
+                    <!-- Conexión de red interna -->
+                    <div class="flecha-red">
+                        ── (Red interna) ──►
+                    </div>
+
+                    <!-- Contenedor MariaDB + Volumen -->
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="caja-contenedor" style="border-color: #10b981;">
+                            <strong style="color: #34d399;">📦 MariaDB</strong>
+                            <small>Motor de Base de Datos</small>
+                        </div>
+                        <div style="color: #10b981; font-size: 0.8em; margin: 4px 0;">▼ (Guarda datos)</div>
+                        <div class="volumen-box">
+                            📁 Carpeta <code>~/datos_db</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entrada desde el puerto exterior -->
+                <div class="conexion-exterior">
+                    🌐 Acceso Web: http://IP_DEL_SERVIDOR:PUERTO/
+                </div>
+            </div>
+        </div>
+
+    <hr>
+
+    <h2>Paso 1: Auditar y Limpiar el Puerto</h2>
+    <div class="reto">
+        <p>1. Verifica si tu puerto está ocupado por alguna prueba anterior:</p>
+        <div class="code-box">sudo ss -tulpn | grep ':PUERTO'</div>
+
+        <p>2. Si la consulta devuelve algún proceso activo, libéralo inmediatamente:</p>
+        <div class="code-box">sudo fuser -k PUERTO/tcp</div>
+
+        <p>3. Vuelve a comprobar que el puerto haya quedado completamente libre.</p>
+    </div>
+
+    <h2>Paso 2: Crear el Directorio para la Base de Datos</h2>
+    <div class="reto">
+        <p>Para garantizar que los datos guardados en la base de datos persistan en el disco del servidor:</p>
+        <p>1. Crea un directorio llamado <code>datos_db</code> dentro de tu carpeta de usuario en el servidor.</p>
+    </div>
+
+    <h2>Paso 3: Levantar el Contenedor de Base de Datos (MariaDB)</h2>
+    <div class="reto">
+        <p>Ejecuta el contenedor del motor de base de datos definiendo la contraseña estándar (<code>root</code>), la base de datos inicial y montando tu carpeta local:</p>
+
+        <div class="code-box">podman run -d --name db_PUERTO -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mi_base -v /home/USUARIO/datos_db:/var/lib/mysql:Z mariadb</div>
+
+        <ul>
+            <li>Reemplaza <span class="highlight">PUERTO</span> por tu número asignado.</li>
+            <li>Reemplaza <span class="highlight">USUARIO</span> por tu nombre de usuario de Linux.</li>
+        </ul>
+    </div>
+
+    <h2>Paso 4: Levantar la Interfaz Gráfica (phpMyAdmin)</h2>
+    <div class="reto">
+        <p>Para publicar el panel de control web en tu puerto asignado, ejecuta el contenedor de phpMyAdmin conectado a la red interna del servidor:</p>
+
+        <div class="code-box">podman run -d -p <span class="highlight">PUERTO</span>:80 --name admin_PUERTO -e PMA_HOST=127.0.0.1 --net=host phpmyadmin</div>
+
+        <div class="pregunta">
+            📷 <strong>Entregable 1:</strong> Captura de pantalla de la terminal mostrando la ejecución del comando y el ID del contenedor generado.
+        </div>
+    </div>
+
+    <h2>Paso 5: Acceso y Verificación en phpMyAdmin</h2>
+    <div class="reto">
+        <p>1. Abre el navegador web en tu computadora e ingresa a la siguiente URL:</p>
+        <div class="code-box">http://IP_DEL_SERVIDOR:PUERTO/</div>
+
+        <p>2. Inicia sesión en el panel gráfico de phpMyAdmin utilizando las siguientes credenciales:</p>
+        <ul>
+            <li><strong>Usuario:</strong> <code>root</code></li>
+            <li><strong>Contraseña:</strong> La clave que definiste en el Paso 3 (ej: <code>mi_clave</code>).</li>
+        </ul>
+
+        <p>3. Una vez adentro, haz clic en el menú superior <strong>Bases de datos</strong> y verifica que exista la base de datos creada automáticamente (<code>mi_base</code>).</p>
+
+        <div class="pregunta">
+            📷 <strong>Entregable 2:</strong> Captura de pantalla del navegador mostrando el panel principal de phpMyAdmin con tu sesión iniciada con éxito.
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const usuarios = {
+        "adriano": 8082,
+        "dylan": 8083,
+        "emiliano": 8084,
+        "angelina": 8085,
+        "ezequiel": 8086,
+        "david_b": 8087,
+        "joaquin": 8088,
+        "eric": 8088,
+        "mateo": 8089,
+        "bautista": 8090,
+        "leandro": 8091,
+        "brandon": 8093,
+        "benjamin": 8093,
+        "fabricio": 8094,
+        "santino": 8096,
+        "alan": 8096,
+        "alex": 8096,
+        "melissa": 8097,
+        "david_m": 8098,
+        "valentina": 8098
+    };
+
+    function buscarPuerto() {
+        const input = document.getElementById("usuarioInput").value.trim().toLowerCase();
+        const divResultado = document.getElementById("resultadoPuerto");
+
+        if (usuarios[input]) {
+            divResultado.style.color = "#0369a1";
+            divResultado.innerHTML = `📌 El puerto asignado a <strong>${input}</strong> es: <span style="font-size: 1.3em; color: #d97706;">${usuarios[input]}</span>`;
+        } else if (input === "") {
+            divResultado.style.color = "#b91c1c";
+            divResultado.innerHTML = "Por favor, escribe un nombre de usuario.";
+        } else {
+            divResultado.style.color = "#b91c1c";
+            divResultado.innerHTML = "❌ Usuario no encontrado. Revisa si está bien escrito.";
+        }
+    }
+</script>
+
+</body>
+</html>
