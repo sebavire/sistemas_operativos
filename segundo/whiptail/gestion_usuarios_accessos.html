@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Usuarios y Accesos</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 10px; }
+    
+    .alerta { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .advertencia { background: #fff8e1; border-left: 5px solid #ffc107; padding: 12px 15px; margin: 15px 0; border-radius: 4px; font-weight: bold; }
+    .destacado { background: #e8f8f5; border-left: 5px solid #2ecc71; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    
+    /* Destacado inline de comandos */
+    .cmd {
+      background-color: #e3f2fd;
+      color: #0d47a1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: bold;
+      border: 1px solid #bbdefb;
+    }
+
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 10px 0 20px 0;
+    }
+
+    .code-box .param { color: #a626a4; font-weight: bold; }
+    .code-box .str { color: #986801; }
+    .code-box .var { color: #1b1e23; }
+    .code-box .sub { color: #50a14f; font-weight: bold; }
+    .code-box .redir { color: #0184bc; font-weight: bold; }
+    .code-box .kw { color: #e45649; font-weight: bold; }
+    
+    ul, ol { margin-top: 5px; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🛠️ Actividad: Gestor de Usuarios y Accesos</h1>
+  
+  <div class="alerta">
+    <strong>Consigna:</strong> Crea un nuevo archivo llamado <code>gestor_usuarios.sh</code>. El objetivo es construir un panel interactivo de administración utilizando <code>whiptail</code>, estructurado mediante <strong>funciones</strong>, control de bucle repetitivo <strong>while true</strong> y manejo de archivos temporales en <code>/tmp</code>.
+  </div>
+
+  <!-- REQUISITO DE ESTRUCTURA -->
+  <h2>1. Requisitos de Funciones</h2>
+  <p>El código debe ser modular. Debes definir al inicio del script las siguientes funciones con nombres representativos:</p>
+  <ul>
+    <li><strong>Listar usuarios del sistema:</strong> Muestra los nombres de los usuarios registrados utilizando el comando <span class="cmd">cut -d: -f1 /etc/passwd</span> y los usuarios activos con <span class="cmd">who</span>.</li>
+    <li><strong>Espacio de directorios personales:</strong> Muestra el tamaño utilizado en las carpetas de los usuarios usando el comando <span class="cmd">du -sh /home/*</span>.</li>
+    <li><strong>Últimos ingresos al sistema:</strong> Consulta el historial de inicios de sesión ejecutando el comando <span class="cmd">last -n 10</span>.</li>
+    <li><strong>Función de limpieza y salida:</strong> Elimina el archivo temporal generado en <code>/tmp</code>, muestra un cuadro de diálogo de despedida con <code>whiptail</code> y finaliza la ejecución con <span class="cmd">exit 0</span>.</li>
+  </ul>
+
+  <p><em>Sintaxis de referencia (Estructura genérica de una función con encabezado y redirección):</em></p>
+  <div class="code-box"><span class="var"># Estructura genérica para generar reportes en archivos temporales</span>
+mi_funcion() {
+    <span class="var"># 1. Se crea o sobreescribe el archivo con el encabezado inicial (>)</span>
+    <span class="kw">echo</span> <span class="str">"=== TITULO ==="</span> <span class="redir">></span> /tmp/archivo_USUARIO.tmp
+    <span class="kw">echo</span> <span class="str">""</span> <span class="redir">>></span> /tmp/archivo_USUARIO.tmp
+
+    <span class="var"># 2. Se concatena el resultado del comando al final del archivo (>>)</span>
+    comando <span class="redir">>></span> /tmp/archivo_USUARIO.tmp
+
+    <span class="var"># 3. Se muestra la salida acumulada en el visor</span>
+    whiptail <span class="param">--title</span> <span class="str">"Título de Ventana"</span> <span class="param">--textbox</span> /tmp/archivo_USUARIO.tmp 15 70
+}</div>
+
+  <!-- REQUISITO DE INTERFAZ -->
+  <h2>2. Menú Principal y Control de Flujo</h2>
+  <p>El programa principal debe ejecutarse dentro de un bucle <span class="cmd">while true</span> presentando un menú interactivo con <code>whiptail</code> (puedes usar <span class="cmd">--menu</span> o <span class="cmd">--radiolist</span>).</p>
+  
+  <div class="destacado">
+    💡 <strong>Sugerencia:</strong> Revisa el código de la actividad anterior <code>config_servidor.sh</code> o consulta la guía de la actividad <strong>Menú de Selección</strong> para reutilizar la estructura base del menú.
+  </div>
+
+  <p>El menú debe contar con las siguientes 4 opciones:</p>
+  <ol>
+    <li>Ver lista de usuarios registrados</li>
+    <li>Consultar almacenamiento en /home</li>
+    <li>Ver historial de últimos accesos</li>
+    <li>Salir del programa</li>
+  </ol>
+
+  <p><em>Sintaxis de referencia (Estructura modular del case):</em></p>
+  <div class="code-box"><span class="var"># Dentro del bucle while true:</span>
+<span class="kw">case</span> <span class="str">"$SELECCION"</span> <span class="kw">in</span>
+    <span class="str">"1"</span>) funcion_tarea_1 ;;
+    <span class="str">"2"</span>) funcion_tarea_2 ;;
+    <span class="str">"3"</span>) funcion_tarea_3 ;;
+    <span class="str">"4"</span>) limpiar_y_salir ;;
+<span class="kw">esac</span></div>
+
+  <!-- <div class="destacado">
+    💡 <strong>Regla de oro:</strong> Dentro del <code>case</code> NO deben existir comandos directos de Linux ni llamadas intermedias a <code>whiptail</code>. Únicamente se debe invocar a la función correspondiente.
+  </div> -->
+
+  <div class="advertencia">
+    🧪 Lista de Verificación (Checklist de Corrección):
+    <ul>
+      <li>[ ] Le otorgaste permisos de ejecución al archivo (<span class="cmd">chmod 700 gestor_usuarios.sh</span>).</li>
+      <li>[ ] Cada función incluye un título con <span class="cmd">echo ></span> y acumula los datos con <span class="cmd">>></span>.</li>
+      <li>[ ] Las salidas se leen correctamente mediante <span class="cmd">--textbox</span> desde <code>/tmp</code>.</li>
+      <li>[ ] La función de salida borra el archivo temporal con <span class="cmd">rm -f</span> antes de cerrar el script.</li>
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>
