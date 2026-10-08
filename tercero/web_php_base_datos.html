@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectando Web PHP con Base de Datos en Podman</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #1e2a3a; }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #0b3b5c; border-bottom: 4px solid #0b3b5c; padding-bottom: 10px; }
+        h2 { color: #1e5a7a; margin-top: 25px; border-left: 5px solid #1e5a7a; padding-left: 10px; }
+        .reto { background: #f8f9fa; border-left: 5px solid #0284c7; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .code-box { background: #272822; color: #f8f8f2; padding: 12px; border-radius: 6px; font-family: 'Consolas', 'Courier New', monospace; margin: 10px 0; overflow-x: auto; white-space: pre-wrap; font-size: 0.9em; }
+        .highlight { color: #f92672; font-weight: bold; }
+        .entregable { background: #fff3cd; border-left: 5px solid #ffc107; padding: 12px; margin: 15px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🌐 Actividad: Conectar Sitio Web (PHP) a la Base de Datos</h1>
+    <p>En esta actividad desplegaremos un tercer contenedor con un servidor web en <strong>PHP</strong> que leerá e imprimirá datos en tiempo real desde la base de datos que creamos antes.</p>
+
+    <h2>Paso 1: Crear la Tabla de Datos en phpMyAdmin</h2>
+    <div class="reto">
+        <p>1. Entra a tu phpMyAdmin desde el navegador (<code>http://192.168.2.245:TU_PUERTO/</code>).</p>
+        <p>2. Selecciona tu base de datos <strong>mi_base</strong> en el menú de la izquierda.</p>
+        <p>3. Haz clic en la pestaña <strong>SQL</strong> superior, pega las siguientes sentencias y presiona <strong>Continuar</strong>:</p>
+        
+        <div class="code-box">CREATE TABLE IF NOT EXISTS productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL
+);
+
+INSERT INTO productos (nombre, categoria, precio, stock) VALUES 
+('Servidor RACK 2U', 'Hardware', 1450.00, 4),
+('Switch Administrable 24p', 'Redes', 320.50, 12),
+('Router Gigabit Dual Band', 'Redes', 85.00, 25),
+('Disco SSD NVMe 1TB', 'Almacenamiento', 110.00, 18),
+('Cable UTP Categoria 6 (305m)', 'Cableado', 95.00, 8);</div>
+    </div>
+
+    <h2>Paso 2: Crear el Archivo PHP en tu Servidor</h2>
+    <div class="reto">
+        <p>1. Crea una carpeta para tu sitio web llamada <code>sitio_web_php</code></p>
+        
+
+        <p>2. Dentro de la misma, crea un archivo llamado <code>index.php</code></p>
+        
+
+        <p>3. Copia el siguiente código, pégalo en el archivo y ajusta la variable <code>$password</code> si cambiaste tu clave:</p>
+        <div class="code-box">&lt;?php
+$host     = '127.0.0.1';
+$usuario  = 'root';
+$password = 'root'; // &lt;-- MODIFICAR SI CAMBIASTE TU CONTRASEÑA
+$base_db  = 'mi_base';
+
+$conn = new mysqli($host, $usuario, $password, $base_db);
+
+if ($conn-&gt;connect_error) {
+    die("&lt;h2 style='color:red;'&gt;Error de Conexión: " . $conn-&gt;connect_error . "&lt;/h2&gt;");
+}
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Inventario de Productos&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f6f9; }
+        h1 { color: #0b3b5c; }
+        .estado { padding: 10px; background-color: #d1e7dd; color: #0f5132; border-radius: 5px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #0b3b5c; color: white; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Catálogo de Productos en Tiempo Real&lt;/h1&gt;
+    &lt;div class="estado"&gt;Conectado exitosamente al contenedor MariaDB&lt;/div&gt;
+
+    &lt;table&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;&lt;th&gt;ID&lt;/th&gt;&lt;th&gt;Producto&lt;/th&gt;&lt;th&gt;Categoría&lt;/th&gt;&lt;th&gt;Precio&lt;/th&gt;&lt;th&gt;Stock&lt;/th&gt;&lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;?php
+            $resultado = $conn-&gt;query("SELECT * FROM productos");
+            while($row = $resultado-&gt;fetch_assoc()) {
+                echo "&lt;tr&gt;
+                        &lt;td&gt;" . $row["id"] . "&lt;/td&gt;
+                        &lt;td&gt;&lt;strong&gt;" . $row["nombre"] . "&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;" . $row["categoria"] . "&lt;/td&gt;
+                        &lt;td&gt;$" . number_format($row["precio"], 2) . "&lt;/td&gt;
+                        &lt;td&gt;" . $row["stock"] . " u.&lt;/td&gt;
+                      &lt;/tr&gt;";
+            }
+            $conn-&gt;close();
+            ?&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+        <!-- <p><em>(Para guardar en nano: presiona <code>Ctrl+O</code>, <code>Enter</code> y luego <code>Ctrl+X</code>).</em></p> -->
+    </div>
+
+    <h2>Paso 3: Desplegar el Contenedor Web en Podman</h2>
+    <div class="reto">
+        <p>1. Ejecuta el contenedor web mapeando la carpeta creada al servidor Apache interno:</p>
+        <div class="code-box">podman run -d -p <span class="highlight">PUERTO_WEB</span>:80 --name web_<span class="highlight">PUERTO_WEB</span> -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</div>
+        <p><em>(Ejemplo si tu puerto es 8085, usas <code>9085</code> de puerto web: <code>podman run -d -p 9085:80 --name web_8085 -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</code>)</em>.</p>
+
+        <p>2. Habilita el conector de MySQL dentro del contenedor PHP (solo se ejecuta una vez):</p>
+        <div class="code-box">podman exec -it web_<span class="highlight">PUERTO_WEB</span> docker-php-ext-install mysqli</div>
+    </div>
+
+    <h2>Paso 4: Verificación Final</h2>
+    <div class="reto">
+        <p>Abre en el navegador la dirección: <code>http://192.168.2.245:PUERTO_WEB/</code></p>
+        <p>Si todo está correcto, verás la tabla con los productos traídos desde MariaDB.</p>
+    </div>
+
+    <div class="entregable">
+        📷 <strong>Entregable:</strong> Agrega un nuevo producto manualmente desde phpMyAdmin, refresca tu página web y toma una captura donde se vea el producto nuevo reflejado en la tabla.
+    </div>
+
+</div>
+</body>
+</html>
