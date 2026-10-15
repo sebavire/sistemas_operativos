@@ -19,7 +19,7 @@
 <div class="container">
 
     <h1>🌐 Actividad: Conectar Sitio Web (PHP) a la Base de Datos</h1>
-    <p>En esta actividad desplegaremos un tercer contenedor con un servidor web en <strong>PHP</strong> que leerá e imprimirá datos en tiempo real desde la base de datos que creamos antes.</p>
+    <p>En esta actividad desplegaremos un tercer contenedor con un servidor web en <strong>PHP</strong> que leerá e imprimirá datos en tiempo real desde la base de datos MariaDB que creamos en la práctica anterior.</p>
 
     <h2>Paso 1: Crear la Tabla de Datos en phpMyAdmin</h2>
     <div class="reto">
@@ -45,17 +45,17 @@ INSERT INTO productos (nombre, categoria, precio, stock) VALUES
 
     <h2>Paso 2: Crear el Archivo PHP en tu Servidor</h2>
     <div class="reto">
-        <p>1. Crea una carpeta para tu sitio web llamada <code>sitio_web_php</code></p>
-        
+        <p>1. Crea una carpeta para tu sitio web llamada: <code>sitio_web_php</code></p>
+        <!-- <div class="code-box">mkdir ~/sitio_web_php</div> -->
 
-        <p>2. Dentro de la misma, crea un archivo llamado <code>index.php</code></p>
-        
+        <p>2. Crea un archivo llamado <code>index.php</code> dentro de esa carpeta:</p>
+        <!-- <div class="code-box">nano ~/sitio_web_php/index.php</div> -->
 
-        <p>3. Copia el siguiente código, pégalo en el archivo y ajusta la variable <code>$password</code> si cambiaste tu clave:</p>
+        <p>3. Copia el siguiente código y ajusta la variable <code>$host</code> reemplazando <span class="highlight">PUERTO</span> por tu puerto asignado (ej: <code>db_8094</code>):</p>
         <div class="code-box">&lt;?php
-$host     = '127.0.0.1';
+$host     = 'db_<span class="highlight">PUERTO</span>'; // &lt;-- NOMBRE DE TU CONTENEDOR DE BASE DE DATOS
 $usuario  = 'root';
-$password = 'root'; // &lt;-- MODIFICAR SI CAMBIASTE TU CONTRASEÑA
+$password = 'root'; 
 $base_db  = 'mi_base';
 
 $conn = new mysqli($host, $usuario, $password, $base_db);
@@ -105,27 +105,28 @@ if ($conn-&gt;connect_error) {
     &lt;/table&gt;
 &lt;/body&gt;
 &lt;/html&gt;</div>
-        <!-- <p><em>(Para guardar en nano: presiona <code>Ctrl+O</code>, <code>Enter</code> y luego <code>Ctrl+X</code>).</em></p> -->
+        <p><em>(Para guardar en nano: presiona <code>Ctrl+O</code>, <code>Enter</code> y luego <code>Ctrl+X</code>).</em></p>
     </div>
 
     <h2>Paso 3: Desplegar el Contenedor Web en Podman</h2>
     <div class="reto">
-        <p>1. Ejecuta el contenedor web mapeando la carpeta creada al servidor Apache interno:</p>
-        <div class="code-box">podman run -d -p <span class="highlight">PUERTO_WEB</span>:80 --name web_<span class="highlight">PUERTO_WEB</span> -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</div>
-        <p><em>(Ejemplo si tu puerto es 8085, usas <code>9085</code> de puerto web: <code>podman run -d -p 9085:80 --name web_8085 -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</code>)</em>.</p>
+        <p>1. Ejecuta el contenedor web conectándolo a la misma red (<code>mi_red</code>) y mapeando tu carpeta local:</p>
+        <div class="code-box">podman run -d --net mi_red -p <span class="highlight">PUERTO_WEB</span>:80 --name web_<span class="highlight">PUERTO_WEB</span> -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</div>
+        <p><em>(Ejemplo: si tu puerto de la DB/Admin es 8085, usas <code>9085</code> como puerto web: <code>podman run -d --net mi_red -p 9085:80 --name web_9085 -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</code>)</em>.</p>
 
-        <p>2. Habilita el conector de MySQL dentro del contenedor PHP (solo se ejecuta una vez):</p>
+        <p>2. Habilita la extensión <code>mysqli</code> para permitir la conexión entre PHP y MariaDB:</p>
         <div class="code-box">podman exec -it web_<span class="highlight">PUERTO_WEB</span> docker-php-ext-install mysqli</div>
     </div>
 
     <h2>Paso 4: Verificación Final</h2>
     <div class="reto">
-        <p>Abre en el navegador la dirección: <code>http://192.168.2.245:PUERTO_WEB/</code></p>
-        <p>Si todo está correcto, verás la tabla con los productos traídos desde MariaDB.</p>
+        <p>Abre tu navegador e ingresa a la dirección de tu sitio web:</p>
+        <div class="code-box">http://192.168.2.245:<span class="highlight">PUERTO_WEB</span>/</div>
+        <p>Si todo se conectó correctamente, verás la tabla renderizada con los datos leídos directamente desde MariaDB.</p>
     </div>
 
     <div class="entregable">
-        📷 <strong>Entregable:</strong> Agrega un nuevo producto manualmente desde phpMyAdmin, refresca tu página web y toma una captura donde se vea el producto nuevo reflejado en la tabla.
+        📷 <strong>Entregable:</strong> Agrega un nuevo producto manualmente desde phpMyAdmin, refresca tu página web y toma una captura donde se vea el nuevo producto reflejado en la tabla.
     </div>
 
 </div>

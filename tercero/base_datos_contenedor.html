@@ -27,7 +27,7 @@
         }
         h2 {
             color: #1e5a7a;
-            margin-top: 20px;
+            margin-top: 25px;
             border-left: 5px solid #1e5a7a;
             padding-left: 10px;
         }
@@ -67,28 +67,10 @@
             font-size: 1.1em;
             color: #0f172a;
         }
-        .concepto {
-            background-color: #eef6fb;
-            border: 1px solid #cbd5e1;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        .diagrama {
-            background: #1e293b;
-            color: #f8fafc;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.85em;
-            white-space: pre;
-            overflow-x: auto;
-            line-height: 1.2;
-        }
         .reto {
             background: #f8f9fa;
             border-left: 5px solid #1e5a7a;
-            padding: 12px;
+            padding: 12px 15px;
             margin: 12px 0;
             border-radius: 4px;
         }
@@ -96,17 +78,18 @@
             background: #fff3cd;
             border-left: 5px solid #ffc107;
             padding: 10px;
-            margin: 10px 0;
+            margin: 12px 0;
             border-radius: 4px;
         }
         .code-box {
             background: #272822;
             color: #f8f8f2;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 5px;
             font-family: 'Consolas', 'Courier New', monospace;
-            margin: 6px 0;
-            display: inline-block;
+            margin: 8px 0;
+            display: block;
+            word-break: break-all;
         }
         .highlight {
             color: #f92672;
@@ -201,101 +184,101 @@
     <div class="buscador-box">
         <h3>🔍 Consulta tu Puerto Asignado</h3>
         <p>Escribe tu usuario de Linux (o el de tu compañero si trabajan en pareja) para consultar tu puerto:</p>
-        <input type="text" id="usuarioInput" placeholder="Ej: adriano">
+        <input type="text" id="usuarioInput" placeholder="Ej: adriano" onkeypress="if(event.key === 'Enter') buscarPuerto()">
         <button onclick="buscarPuerto()">Consultar</button>
         <div id="resultadoPuerto"></div>
     </div>
 
     <div class="diagrama-css">
-            <div class="servidor-box">
-                <div class="servidor-titulo">ENTORNO DE USUARIO EN EL SERVIDOR</div>
-                
-                <div class="contenedores-flex">
-                    <!-- Contenedor phpMyAdmin -->
-                    <div class="caja-contenedor">
-                        <strong>📦 phpMyAdmin</strong>
-                        <small>Interfaz Web Gráfica</small>
-                    </div>
-
-                    <!-- Conexión de red interna -->
-                    <div class="flecha-red">
-                        ── (Red interna) ──►
-                    </div>
-
-                    <!-- Contenedor MariaDB + Volumen -->
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <div class="caja-contenedor" style="border-color: #10b981;">
-                            <strong style="color: #34d399;">📦 MariaDB</strong>
-                            <small>Motor de Base de Datos</small>
-                        </div>
-                        <div style="color: #10b981; font-size: 0.8em; margin: 4px 0;">▼ (Guarda datos)</div>
-                        <div class="volumen-box">
-                            📁 Carpeta <code>~/datos_db</code>
-                        </div>
-                    </div>
+        <div class="servidor-box">
+            <div class="servidor-titulo">RED INTERNA PODMAN: mi_red</div>
+            
+            <div class="contenedores-flex">
+                <!-- Contenedor phpMyAdmin -->
+                <div class="caja-contenedor">
+                    <strong>📦 phpMyAdmin</strong>
+                    <small>Interfaz Web Gráfica</small>
                 </div>
 
-                <!-- Entrada desde el puerto exterior -->
-                <div class="conexion-exterior">
-                    🌐 Acceso Web: http://IP_DEL_SERVIDOR:PUERTO/
+                <!-- Conexión de red interna -->
+                <div class="flecha-red">
+                    ── (PMA_HOST=db_PUERTO) ──►
+                </div>
+
+                <!-- Contenedor MariaDB + Volumen -->
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <div class="caja-contenedor" style="border-color: #10b981;">
+                        <strong style="color: #34d399;">📦 MariaDB</strong>
+                        <small>Motor de Base de Datos</small>
+                    </div>
+                    <div style="color: #10b981; font-size: 0.8em; margin: 4px 0;">▼ (Guarda datos)</div>
+                    <div class="volumen-box">
+                        📁 Carpeta <code>~/datos_db</code>
+                    </div>
                 </div>
             </div>
+
+            <!-- Entrada desde el puerto exterior -->
+            <div class="conexion-exterior">
+                🌐 Acceso Web Exterior: http://192.168.2.245:PUERTO/
+            </div>
         </div>
+    </div>
 
     <hr>
 
-    <h2>Paso 1: Auditar y Limpiar el Puerto</h2>
+    <h2>Paso 1: Auditar y Limpiar el Entorno</h2>
     <div class="reto">
-        <p>1. Verifica si tu puerto está ocupado por alguna prueba anterior:</p>
-        <div class="code-box">sudo ss -tulpn | grep ':PUERTO'</div>
+        <p>1. Verifica si tienes contenedores corriendo o detenidos en tu sesión:</p>
+        <div class="code-box">podman ps -a</div>
 
-        <p>2. Si la consulta devuelve algún proceso activo, libéralo inmediatamente:</p>
-        <div class="code-box">sudo fuser -k PUERTO/tcp</div>
-
-        <p>3. Vuelve a comprobar que el puerto haya quedado completamente libre.</p>
+        <p>2. Elimina cualquier contenedor previo para evitar conflictos de nombres o puertos ocupados:</p>
+        <div class="code-box">podman rm -f -a</div>
     </div>
 
-    <h2>Paso 2: Crear el Directorio para la Base de Datos</h2>
+    <h2>Paso 2: Crear la Red Interna de Podman</h2>
     <div class="reto">
-        <p>Para garantizar que los datos guardados en la base de datos persistan en el disco del servidor:</p>
-        <p>1. Crea un directorio llamado <code>datos_db</code> dentro de tu carpeta de usuario en el servidor.</p>
+        <p>Para que los contenedores puedan comunicarse directamente entre sí por su nombre, crearemos una red virtual aislada:</p>
+        <div class="code-box">podman network create mi_red</div>
+        <p><small><em>(Si la terminal responde que la red ya existe, continúa normalmente).</em></small></p>
     </div>
 
     <h2>Paso 3: Levantar el Contenedor de Base de Datos (MariaDB)</h2>
     <div class="reto">
-        <p>Ejecuta el contenedor del motor de base de datos definiendo la contraseña estándar (<code>root</code>), la base de datos inicial y montando tu carpeta local:</p>
+        <p>Inicia la base de datos MariaDB dentro de la red aislada, definiendo la contraseña de administrador (<code>root</code>), la base inicial y montando tu carpeta personal:</p>
 
-        <div class="code-box">podman run -d --name db_PUERTO -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mi_base -v /home/USUARIO/datos_db:/var/lib/mysql:Z mariadb</div>
+        <div class="code-box">podman run -d --net mi_red --name db_<span class="highlight">PUERTO</span> -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mi_base -v ~/datos_db:/var/lib/mysql:Z mariadb</div>
 
         <ul>
-            <li>Reemplaza <span class="highlight">PUERTO</span> por tu número asignado.</li>
-            <li>Reemplaza <span class="highlight">USUARIO</span> por tu nombre de usuario de Linux.</li>
+            <li>Reemplaza <span class="highlight">PUERTO</span> por tu número de puerto asignado.</li>
+            <li>El parámetro <code>-v ~/datos_db:...</code> garantiza la persistencia de tus tablas en el servidor.</li>
         </ul>
     </div>
 
     <h2>Paso 4: Levantar la Interfaz Gráfica (phpMyAdmin)</h2>
     <div class="reto">
-        <p>Para publicar el panel de control web en tu puerto asignado, ejecuta el contenedor de phpMyAdmin conectado a la red interna del servidor:</p>
+        <p>Ejecuta phpMyAdmin en la misma red e indica en la variable <code>PMA_HOST</code> el nombre de tu contenedor de base de datos (<code>db_PUERTO</code>):</p>
 
-        <div class="code-box">podman run -d -p <span class="highlight">PUERTO</span>:80 --name admin_PUERTO -e PMA_HOST=127.0.0.1 phpmyadmin</div>
+        <div class="code-box">podman run -d --net mi_red -p <span class="highlight">PUERTO</span>:80 --name admin_<span class="highlight">PUERTO</span> -e PMA_HOST=db_<span class="highlight">PUERTO</span> phpmyadmin</div>
         
         <div class="pregunta">
-            📷 <strong>Entregable 1:</strong> Captura de pantalla de la terminal mostrando la ejecución del comando y el ID del contenedor generado.
+            📷 <strong>Entregable 1:</strong> Captura de pantalla de la terminal mostrando la ejecución de <code>podman ps</code> con ambos contenedores en estado <strong>Up</strong>.
         </div>
     </div>
 
     <h2>Paso 5: Acceso y Verificación en phpMyAdmin</h2>
     <div class="reto">
-        <p>1. Abre el navegador web en tu computadora e ingresa a la siguiente URL:</p>
-        <div class="code-box">http://IP_DEL_SERVIDOR:PUERTO/</div>
+        <p>1. Abre el navegador e ingresa a tu dirección web asignada:</p>
+        <div class="code-box">http://192.168.2.245:<span class="highlight">PUERTO</span>/</div>
 
-        <p>2. Inicia sesión en el panel gráfico de phpMyAdmin utilizando las siguientes credenciales:</p>
+        <p>2. Inicia sesión en el panel de phpMyAdmin con las credenciales de MariaDB:</p>
         <ul>
+            <li><strong>Servidor / Host:</strong> <em>(dejar por defecto)</em></li>
             <li><strong>Usuario:</strong> <code>root</code></li>
-            <li><strong>Contraseña:</strong> La clave que definiste en el Paso 3 (ej: <code>mi_clave</code>).</li>
+            <li><strong>Contraseña:</strong> <code>root</code></li>
         </ul>
 
-        <p>3. Una vez adentro, haz clic en el menú superior <strong>Bases de datos</strong> y verifica que exista la base de datos creada automáticamente (<code>mi_base</code>).</p>
+        <p>3. Verifica en la barra lateral izquierda que aparezca la base de datos creada automáticamente (<code>mi_base</code>).</p>
 
         <div class="pregunta">
             📷 <strong>Entregable 2:</strong> Captura de pantalla del navegador mostrando el panel principal de phpMyAdmin con tu sesión iniciada con éxito.
