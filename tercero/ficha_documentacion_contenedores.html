@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha: Documentación de la Arquitectura de Contenedores</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #1e2a3a; }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #0b3b5c; border-bottom: 4px solid #0b3b5c; padding-bottom: 10px; }
+        h2 { color: #1e5a7a; margin-top: 20px; border-left: 5px solid #1e5a7a; padding-left: 10px; }
+        .reto { background: #f8f9fa; border-left: 5px solid #0284c7; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .code-box { background: #272822; color: #f8f8f2; padding: 10px 14px; border-radius: 6px; font-family: 'Consolas', 'Courier New', monospace; margin: 8px 0; word-break: break-all; font-size: 0.9em; }
+        .entregable { background: #e8f8f5; border-left: 5px solid #1abc9c; padding: 12px; margin: 15px 0; border-radius: 4px; }
+        ul, ol { margin-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>📝 Ficha Técnica: Documentación de la Arquitectura de Contenedores</h1>
+    
+    <h2>Parte 1: Ficha Técnica de tu Entorno</h2>
+    <div class="reto">
+        <p>Crea un documento de texto (Word o Google Docs) y registra los datos específicos de tu arquitectura:</p>
+        <ul>
+            <li><strong>Tu usuario de Linux:</strong> __________________</li>
+            <li><strong>Tu puerto de Base de Datos / phpMyAdmin:</strong> <code>80XX</code></li>
+            <li><strong>Tu puerto de Servidor Web PHP:</strong> <code>90XX</code></li>
+            <li><strong>Nombre de la red interna de Podman:</strong> <code>mi_red</code></li>
+            <li><strong>Nombre del contenedor de Base de Datos:</strong> <code>db_80XX</code></li>
+            <li><strong>Nombre del contenedor Web:</strong> <code>web_90XX</code></li>
+            <li><strong>Ruta local del sitio web:</strong> <code>~/sitio_web_php</code></li>
+            <li><strong>Ruta local de la base de datos:</strong> <code>~/datos_db</code></li>
+        </ul>
+    </div>
+
+    <h2>Parte 2: Comandos</h2>
+    <div class="reto">
+        <p>Escribe en tu documento la secuencia exacta de comandos <strong>sustituyendo las palabras clave por TUS números reales de puerto y nombres</strong>.</p>
+        
+        <ol>
+            <li><strong>Crear la red interna:</strong>
+                <div class="code-box">podman network create mi_red</div>
+            </li>
+            <li><strong>Desplegar la Base de Datos MariaDB:</strong>
+                <div class="code-box">podman run -d --net mi_red --name db_PUERTO -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mi_base -v ~/datos_db:/var/lib/mysql:Z mariadb</div>
+            </li>
+            <li><strong>Desplegar phpMyAdmin:</strong>
+                <div class="code-box">podman run -d --net mi_red -p PUERTO:80 --name admin_PUERTO -e PMA_HOST=db_PUERTO phpmyadmin</div>
+            </li>
+            <li><strong>Desplegar el Servidor Web PHP:</strong>
+                <div class="code-box">podman run -d --net mi_red -p PUERTO_WEB:80 --name web_PUERTO_WEB -v ~/sitio_web_php:/var/www/html:Z php:8.2-apache</div>
+            </li>
+            <li><strong>Habilitar la extensión MySQLi en PHP:</strong>
+                <div class="code-box">podman exec -it web_PUERTO_WEB docker-php-ext-install mysqli</div>
+            </li>
+            <li><strong>Reiniciar el contenedor Web PHP:</strong>
+                <div class="code-box">podman restart web_PUERTO_WEB</div>
+            </li>
+        </ol>
+    </div>
+
+    <!-- <h2>Parte 3: Diagnóstico y Resolución de Problemas (10 min)</h2>
+    <div class="reto">
+        <p>Responde brevemente a estas 3 preguntas en tu documento basándote en lo aprendido hoy:</p>
+        <ol>
+            <li>¿Por qué es necesario usar el parámetro <code>--net mi_red</code> al crear los contenedores?</li>
+            <li>Si al abrir el navegador te aparece el error <em>"Class 'mysqli' not found"</em>, ¿qué comando debes ejecutar para solucionarlo?</li>
+            <li>Si apagas la computadora y al volver a iniciar los contenedores están detenidos, ¿qué comando usas para encenderlos de nuevo sin borrarlos?</li>
+        </ol>
+    </div> -->
+
+    <div class="entregable">
+        📤 <strong>Entregable:</strong> Sube a la plataforma CREA tu documento de texto o PDF con la Ficha Técnica, el Secuencial de Comandos personalizado y las respuestas.
+    </div>
+
+</div>
+</body>
+</html>

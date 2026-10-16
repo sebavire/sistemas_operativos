@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actividad de Extensión: Mejoras al Gestor</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f6f9; color: #333; margin: 0; padding: 20px; }
+    .container { max-width: 850px; margin: auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 10px; }
+    
+    .alerta { background: #eef7fc; border-left: 5px solid #3498db; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    .destacado { background: #e8f8f5; border-left: 5px solid #2ecc71; padding: 15px; margin: 15px 0; border-radius: 4px; }
+    
+    .cmd {
+      background-color: #e3f2fd;
+      color: #0d47a1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-weight: bold;
+      border: 1px solid #bbdefb;
+    }
+
+    .code-box {
+      background-color: #ffffff;
+      border: 1px solid #e1e4e8;
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1b1e23;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 10px 0 20px 0;
+    }
+
+    .code-box .param { color: #a626a4; font-weight: bold; }
+    .code-box .str { color: #986801; }
+    .code-box .var { color: #1b1e23; }
+    .code-box .sub { color: #50a14f; font-weight: bold; }
+    .code-box .redir { color: #0184bc; font-weight: bold; }
+    .code-box .kw { color: #e45649; font-weight: bold; }
+    
+    ul, ol { margin-top: 5px; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚡ Actividad de Extensión: Encabezados Dinámicos y Reporte de Estado</h1>
+  
+  <div class="alerta">
+    <strong>Si ya terminaste la versión básica de <code>gestor_usuarios.sh</code>:</strong> Aplica las siguientes dos modificaciones para enriquecer la información mostrada en los visores de texto y agregar una nueva función de diagnóstico.
+  </div>
+
+  <!-- REQUISITO 1 -->
+  <h2>1. Encabezados Dinámicos en Funciones</h2>
+  <p><strong>Consigna:</strong> Modifica tus funciones para que los reportes no muestren únicamente un título estático. Deben incluir metadatos del sistema generados en el momento exacto en que se ejecuta la consulta.</p>
+  
+  <p>El encabezado escrito en el archivo temporal debe contener:</p>
+  <ul>
+    <li>El usuario actual que ejecuta el script (obtenido con el comando <span class="cmd">whoami</span> o la variable <span class="cmd">$USER</span>).</li>
+    <li>La fecha y hora de generación (obtenida con el comando <span class="cmd">date</span>).</li>
+  </ul>
+
+  <p><em>Sintaxis de referencia (Inclusión de comandos en cadenas con subshell):</em></p>
+  <div class="code-box">
+    <!-- <span class="var"># Uso de $(comando) para capturar la salida e imprimirla en el archivo</span>
+<span class="kw">echo</span> <span class="str">"=========================================="</span> <span class="redir">></span> /tmp/archivo.tmp
+<span class="kw">echo</span> <span class="str">" Reporte generado por: $(whoami)"</span> <span class="redir">>></span> /tmp/archivo.tmp -->
+<span class="kw">echo</span> <span class="str">" $(comando)"</span> <span class="redir">>></span> /tmp/archivo.tmp
+<!-- <span class="kw">echo</span> <span class="str">" Fecha de ejecución:  $(date)"</span> <span class="redir">>></span> /tmp/archivo.tmp
+<span class="kw">echo</span> <span class="str">"=========================================="</span> <span class="redir">>></span> /tmp/archivo.tmp -->
+<!-- <span class="kw">echo</span> <span class="str">""</span> <span class="redir">>></span> /tmp/archivo.tmp -->
+</div>
+
+  <!-- REQUISITO 2 -->
+  <h2>2. Nueva Opción: Estado General del Sistema</h2>
+  <p><strong>Consigna:</strong> Agrega una nueva función al inicio del script llamada <code>reporte_estado()</code> e intégrala como una nueva opción en el menú de <code>whiptail</code> y en la evaluación del <code>case</code>.</p>
+  
+  <p>Esta función debe combinar la salida de múltiples comandos en un solo reporte:</p>
+  <ul>
+    <li>Nombre del equipo / Host (comando <span class="cmd">hostname</span>).</li>
+    <li>Tiempo encendido del servidor (comando <span class="cmd">uptime -p</span>).</li>
+    <li>Resumen de memoria RAM disponible y utilizada (comando <span class="cmd">free -h</span>).</li>
+  </ul>
+
+  <div class="destacado">
+    💡 <strong>Recordatorio:</strong> Recuerda usar <span class="cmd">></span> únicamente para la primera línea del archivo temporal para sobrescribir consultas anteriores, y <span class="cmd">>></span> para concatenar los demás comandos en orden secuencial antes de abrir la ventana <span class="cmd">--textbox</span>.
+  </div>
+
+</div>
+
+</body>
+</html>
