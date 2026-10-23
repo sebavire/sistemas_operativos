@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despliegue de Sitio Web 2 (Clientes)</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h1, h2, h3 { color: #0b5c3b; }
+        code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.95em; color: #d63384; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        .buscador-box { background-color: #eef2f7; border: 2px solid #0b5c3b; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .btn-buscar { padding: 10px 20px; font-size: 16px; background-color: #0b5c3b; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-buscar:hover { background-color: #08442b; }
+        .input-usuario { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; flex-grow: 1; }
+        .paso-titulo { background-color: #0b5c3b; color: white; padding: 8px 12px; border-radius: 4px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Despliegue del Segundo Sitio Web</h1>
+    <p>En este desafío desplegaremos un **segundo sitio web independiente** (Directorio de Clientes) conectado a la misma base de datos de actividades anteriores.</p>
+    <p>utiliza los comandos de la <strong>Ficha Técnica</strong> elaborada en la actividad anterior..</p>
+
+    <!-- BUSCADOR DE PUERTOS -->
+    <div class="buscador-box">
+        <h3 style="margin-top: 0;">🔍 Consulta tus Puertos Asignados</h3>
+        <p>Ingresá tu nombre de usuario para obtener tus puertos y parámetros exactos:</p>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="inputUsuario" class="input-usuario" placeholder="Usuario" onkeypress="if(event.key === 'Enter') buscarPuertos()">
+            <button onclick="buscarPuertos()" class="btn-buscar">Consultar</button>
+        </div>
+
+        <div id="resultadoPuertos" style="display: none; background-color: white; padding: 15px; border-radius: 6px; border: 1px solid #ddd;"></div>
+    </div>
+
+    <!-- PASO 1 -->
+    <h2><span class="paso-titulo">Paso 1</span> Base de Datos: Crear Tabla Clientes</h2>
+    <p>1. Ingresá a tu <strong>phpMyAdmin</strong> desde el navegador usando tu Puerto Base.</p>
+    <p>2. Seleccioná tu base de datos <code>mi_base</code>, andá a la pestaña <strong>SQL</strong> y ejecutá:</p>
+    
+<pre><code>CREATE TABLE IF NOT EXISTS clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefono VARCHAR(30) NOT NULL,
+    ciudad VARCHAR(50) NOT NULL
+);
+
+INSERT INTO clientes (nombre, email, telefono, ciudad) VALUES 
+('Mariana Silva', 'msilva@gmail.com', '099123456', 'Montevideo'),
+('Carlos Rodríguez', 'crodriguez@hotmail.com', '098654321', 'Salto'),
+('Ana Laura Gómez', 'agomez@yahoo.com', '091888999', 'Maldonado');</code></pre>
+
+    <!-- PASO 2 -->
+    <h2><span class="paso-titulo">Paso 2</span> Crear Directorio y Archivo PHP</h2>
+    <p>1. En la terminal del servidor, crea la carpeta para el nuevo sitio:</p>
+    <pre><code>mkdir ~/sitio_clientes</code></pre>
+
+    <p>2. Crea el archivo <code>index.php</code> dentro de esa carpeta:</p>
+    <pre><code>nano ~/sitio_clientes/index.php</code></pre>
+
+    <p>3. Pega el siguiente código (<strong>Atención:</strong> reemplazá <code>db_PUERTO</code> por el nombre de tu contenedor de base de datos obtenido en el buscador de arriba):</p>
+
+<pre><code>&lt;?php
+$host     = 'db_PUERTO'; // &lt;-- Reemplazar por tu contenedor (Ej: db_8098)
+$usuario  = 'root';
+$password = 'root'; 
+$base_db  = 'mi_base';
+
+$conn = new mysqli($host, $usuario, $password, $base_db);
+
+if ($conn-&gt;connect_error) {
+    die("&lt;h2 style='color:red;'&gt;Error de Conexión: " . $conn-&gt;connect_error . "&lt;/h2&gt;");
+}
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Directorio de Clientes&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f6f9; color: #1e2a3a; }
+        h1 { color: #0b5c3b; }
+        .estado { padding: 10px; background-color: #d1e7dd; color: #0f5132; border-radius: 5px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #0b5c3b; color: white; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;👥 Directorio de Clientes del Sistema&lt;/h1&gt;
+    &lt;div class="estado"&gt;Conexión Exitosa a la Base de Datos&lt;/div&gt;
+
+    &lt;table&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;ID&lt;/th&gt;
+                &lt;th&gt;Nombre Completo&lt;/th&gt;
+                &lt;th&gt;Correo Electrónico&lt;/th&gt;
+                &lt;th&gt;Teléfono&lt;/th&gt;
+                &lt;th&gt;Ciudad&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;?php
+            $resultado = $conn-&gt;query("SELECT * FROM clientes");
+            while($row = $resultado-&gt;fetch_assoc()) {
+                echo "&lt;tr&gt;
+                        &lt;td&gt;" . $row["id"] . "&lt;/td&gt;
+                        &lt;td&gt;&lt;strong&gt;" . $row["nombre"] . "&lt;/strong&gt;&lt;/td&gt;
+                        &lt;td&gt;" . $row["email"] . "&lt;/td&gt;
+                        &lt;td&gt;" . $row["telefono"] . "&lt;/td&gt;
+                        &lt;td&gt;" . $row["ciudad"] . "&lt;/td&gt;
+                      &lt;/tr&gt;";
+            }
+            $conn-&gt;close();
+            ?&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    <!-- <p><em>(Guardá los cambios con <code>Ctrl + O</code>, presioná <code>Enter</code> y salí con <code>Ctrl + X</code>).</em></p> -->
+
+    <!-- PASO 3 -->
+    <h2><span class="paso-titulo">Paso 3</span> Desplegar el Contenedor con Podman</h2>
+    <p>Consulta tu <strong>Ficha Técnica</strong> y despliega el nuevo contenedor ajustando los siguientes parámetros según tus datos consultados:</p>
+    <ul>
+        <li><strong>Nombre del contenedor:</strong> <code>web_clientes_TU_PUERTO</code></li>
+        <li><strong>Puerto asignado:</strong> Rango <code>81XX</code></li>
+        <li><strong>Carpeta montada:</strong> <code>~/sitio_clientes</code></li>
+        <li><strong>Red:</strong> <code>mi_red</code></li>
+        <li><strong>Política de reinicio:</strong> Incluir <code>--restart always</code></li>
+    </ul>
+
+    <p>No olvides habilitar la extensión <code>mysqli</code> dentro del nuevo contenedor:</p>
+    <pre><code>podman exec -it web_clientes_PUERTO docker-php-ext-install mysqli</code></pre>
+
+    <!-- PASO 4 -->
+    <h2><span class="paso-titulo">Paso 4</span> Comprobación Final</h2>
+    <p>Ingresá desde el navegador web a tu sitio de clientes usando el puerto <code>81XX</code> asignado. Si todo es correcto, verás la tabla de clientes cargada exitosamente.</p>
+</div>
+
+<script>
+const usuarios = {
+    "adriano": 8082, "dylan": 8083, "emiliano": 8084, "angelina": 8085,
+    "ezequiel": 8086, "david_b": 8087, "joaquin": 8088, "eric": 8088,
+    "mateo": 8089, "bautista": 8090, "leandro": 8091, "brandon": 8093,
+    "benjamin": 8093, "fabricio": 8094, "santino": 8096, "alan": 8096,
+    "alex": 8096, "melissa": 8097, "david_m": 8098, "valentina": 8098
+};
+
+function buscarPuertos() {
+    const input = document.getElementById("inputUsuario").value.trim().toLowerCase();
+    const contenedorResultado = document.getElementById("resultadoPuertos");
+    
+    if (!input || !usuarios[input]) {
+        contenedorResultado.style.display = "block";
+        contenedorResultado.innerHTML = `<p style="color: #dc3545; margin: 0; font-weight: bold;">⚠️ Usuario "${input}" no encontrado. Verificá que esté bien escrito.</p>`;
+        return;
+    }
+
+    const puertoBase = usuarios[input];
+    const sufijo = puertoBase.toString().slice(-2);
+    const puertoWeb1 = "90" + sufijo;
+    const puertoWeb2 = "81" + sufijo;
+
+    contenedorResultado.style.display = "block";
+    contenedorResultado.innerHTML = `
+        <h4 style="margin-top:0; color:#0b5c3b;">Parámetros asignados para <strong>${input}</strong>:</h4>
+        <ul style="line-height: 1.8; margin-bottom: 0;">
+            <li><strong>Base de Datos / phpMyAdmin:</strong> Puerto <code>${puertoBase}</code> | Contenedor DB: <code>db_${puertoBase}</code></li>
+            <li><strong>Sitio 1 (Productos):</strong> Puerto <code>${puertoWeb1}</code></li>
+            <li><strong>Sitio 2 (Clientes - Esta Actividad):</strong> Puerto <code style="background:#d1e7dd; color:#0f5132; font-weight:bold;">${puertoWeb2}</code> | Nombre del Contenedor: <code>web_clientes_${puertoBase}</code></li>
+            <li><strong>Línea de conexión PHP:</strong> <code>$host = 'db_${puertoBase}';</code></li>
+        </ul>
+    `;
+}
+</script>
+
+</body>
+</html>
