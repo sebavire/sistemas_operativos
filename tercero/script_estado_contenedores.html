@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad: Script de Monitoreo de Contenedores</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h1, h2 { color: #0b5c3b; }
+        code { background-color: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.95em; color: #d63384; }
+        pre { background: #272822; color: #f8f8f2; padding: 15px; border-radius: 6px; overflow-x: auto; font-family: monospace; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        .paso-titulo { background-color: #0b5c3b; color: white; padding: 6px 12px; border-radius: 4px; display: inline-block; font-size: 0.9em; }
+        .entrega { background-color: #eef2f7; border-left: 5px solid #0b5c3b; padding: 15px; border-radius: 4px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Actividad: Script de Monitoreo de Contenedores</h1>
+    <p>Para no tener que recordar ni escribir comandos largos cada vez que quieras saber si tus sitios web o base de datos están funcionando, vas a crear tu propio script ejecutable.</p>
+
+    <!-- PASO 1 -->
+    <h2><span class="paso-titulo">Paso 1</span> Crear el archivo del script</h2>
+    <p>En tu terminal Linux,crea un nuevo archivo llamado <code>mis_contenedores.sh</code> en tu carpeta personal:</p>
+    <!-- <pre><code>nano ~/mis_contenedores.sh</code></pre> -->
+
+    <!-- PASO 2 -->
+    <h2><span class="paso-titulo">Paso 2</span> Escribir la estructura del script</h2>
+    <p>Dentro del editor <code>nano</code>, escribe las siguientes líneas:</p>
+    
+    <ol>
+        <li>En la primera línea, indicá el intérprete de script:
+            <pre><code>#!/bin/bash</code></pre>
+        </li>
+        <li>Agregá un comando <code>echo</code> para imprimir un título visual en pantalla que diga <strong>"Estado de mis contenedores"</strong>. Por ejemplo:
+            <!-- <pre><code>echo "=========================================="
+echo " Estado de mis Contenedores (Podman)"
+echo "=========================================="</code></pre> -->
+        </li>
+        <li>A continuación, agregá el comando para consultar la tabla detallada de tus contenedores:
+            <pre><code>podman ps -a --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"</code></pre>
+        </li>
+        <!-- <li>Podés cerrar con una línea en blanco para prolijidad:
+            <pre><code>echo ""</code></pre>
+        </li> -->
+    </ol>
+
+    <!-- PASO 3 -->
+    <h2><span class="paso-titulo">Paso 3</span> Guardar el archivo</h2>
+    <p>Una vez escritas todas las líneas en el editor:</p>
+    <ul>
+        <li>Presioná <code>Ctrl + O</code> para guardar.</li>
+        <li>Presioná <code>Enter</code> para confirmar el nombre del archivo.</li>
+        <li>Presioná <code>Ctrl + X</code> para salir del editor <code>nano</code>.</li>
+    </ul>
+
+
+    <!-- PASO 3 -->
+    <h2><span class="paso-titulo">Paso 3</span> Dar permisos de ejecución</h2>
+    <p>Guarda y da permisos de ejecución con el comando <code>chmod</code>:</p>
+    <pre><code>chmod 700 mis_contenedores.sh</code></pre>
+
+    <!-- PASO 5 -->
+    <h2><span class="paso-titulo">Paso 5</span> Probar el script</h2>
+    <p>Ejecuta el script:</p>
+    <pre><code>./mis_contenedores.sh</code></pre>
+
+    <!-- ENTREGA
