@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destrucción y recuperación de contenedores</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #1e2a3a;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0b3b5c;
+            border-bottom: 4px solid #0b3b5c;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e5a7a;
+            margin-top: 25px;
+            border-left: 5px solid #1e5a7a;
+            padding-left: 10px;
+        }
+        hr {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+        .buscador-box {
+            background-color: #e0f2fe;
+            border: 2px solid #0284c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .buscador-box input {
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+        .buscador-box button {
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .buscador-box button:hover {
+            background-color: #0369a1;
+        }
+        #resultadoPuerto {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #0f172a;
+        }
+        .reto {
+            background: #f8f9fa;
+            border-left: 5px solid #1e5a7a;
+            padding: 12px 15px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+        .pregunta {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+        .code-box {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px 14px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            margin: 8px 0;
+            display: block;
+            word-break: break-all;
+        }
+        .highlight {
+            color: #f92672;
+            font-weight: bold;
+        }
+        .warning-box {
+            background: #fef2f2;
+            border-left: 5px solid #ef4444;
+            color: #991b1b;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🔥 Destrucción y recuperación de contenedores</h1>
+
+    <!-- Módulo de consulta de puerto -->
+    <div class="buscador-box">
+        <h3>🔍 Consulta tu Puerto Asignado</h3>
+        <p>Escribe tu usuario de Linux (o el de tu compañero si trabajan en pareja):</p>
+        <input type="text" id="usuarioInput" placeholder="Ej: ealboa" onkeypress="if(event.key === 'Enter') buscarPuerto()">
+        <button onclick="buscarPuerto()">Consultar</button>
+        <div id="resultadoPuerto"></div>
+    </div>
+
+    <hr>
+
+    <h2>Paso 1: Creación de la Tabla de Prueba en phpMyAdmin</h2>
+    <div class="reto">
+        <p>1. Ingresa a tu panel web de phpMyAdmin:</p>
+        <div class="code-box">http://192.168.2.245:<span class="highlight">PUERTO</span>/</div>
+        <p>2. Inicia sesión con las credenciales (Usuario: <code>root</code> / Contraseña: <code>root</code>).</p>
+        <p>3. En el menú lateral izquierdo, selecciona la base de datos <code>mi_base</code>.</p>
+        <p>4. Crea una nueva tabla llamada <strong><code>videojuegos</code></strong> con 3 columnas:</p>
+        <ul>
+            <li><code>id</code> (Tipo: <code>INT</code>, marcar la casilla <strong>A_I</strong> / Clave Primaria).</li>
+            <li><code>titulo</code> (Tipo: <code>VARCHAR</code>, Longitud: <code>50</code>).</li>
+            <li><code>genero</code> (Tipo: <code>VARCHAR</code>, Longitud: <code>50</code>).</li>
+        </ul>
+        <p>5. Ve a la pestaña <strong>Insertar</strong> en la barra superior y carga al menos 2 o 3 registros.</p>
+    </div>
+
+    <h2>Paso 2: Destrucción del Contenedor</h2>
+    <div class="reto">
+        <p>Abre la terminal de Linux en tu servidor y ejecuta el siguiente comando para forzar la eliminación del contenedor de la base de datos:</p>
+        <div class="code-box">podman rm -f db_<span class="highlight">PUERTO</span></div>
+        
+        <div class="warning-box">
+            ⚠️ <strong>Comprobación:</strong> Vuelve al navegador web y refresca la página de phpMyAdmin. Verás que la interfaz indica un error de conexión porque el servicio de base de datos fue destruido.
+        </div>
+    </div>
+
+    <h2>Paso 3: Resurrección y Verificación de Persistencia</h2>
+    <div class="reto">
+        <p>Recrea el contenedor de la base de datos vinculando la carpeta personal <code>~/datos_db</code> para comprobar si los datos sobrevivieron:</p>
+        <div class="code-box">podman run -d --restart always --net mi_red --name db_<span class="highlight">PUERTO</span> -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=mi_base -v ~/datos_db:/var/lib/mysql:Z mariadb</div>
+
+        <p>Regresa a phpMyAdmin, refresca el navegador e inicia sesión nuevamente.</p>
+    </div>
+
+    <h2>Paso 4: Entregable Final (Informe de Práctica)</h2>
+    <div class="pregunta">
+        📄 <strong>Consigna de Entrega:</strong> Elabora un documento que contenga la siguiente estructura:
+        <ol>
+            <li><strong>Secuencia Completa de Comandos:</strong> Escribe en orden cronológico los comandos de consola necesarios para desplegar y recuperar el entorno desde cero (revisa tus apuntes o la guía anterior), incluyendo:
+                <ul>
+                    <li>Creación de la carpeta personal de datos.</li>
+                    <li>Creación de la red aislada de Podman.</li>
+                    <li>Despliegue de los contenedores de MariaDB (Gestor de Base de Datos) y de phpMyAdmin (interfaz gráfica).</li>
+                    <li>Destrucción del contenedor.</li>
+                    <li>Reconstrucción del contenedor de base de datos manteniendo la persistencia.</li>
+                </ul>
+            </li>
+            <li><strong>Captura 1:</strong> La terminal ejecutando la eliminación y posterior recreación del contenedor <code>db_PUERTO</code>.</li>
+            <li><strong>Captura 2:</strong> Panel de phpMyAdmin tras recuperar el servicio, mostrando la tabla <code>videojuegos_prueba</code> con sus registros intactos.</li>
+        </ol>
+    </div>
+
+</div>
+
+<script>
+    const usuarios = {
+        "ealboa": 8201,
+        "lberriel": 8202,
+        "mcolacce": 8203,
+        "lcruz": 8204,
+        "hgarcia": 8204,
+        "ldeluca": 8205,
+        "ndorssi": 8206,
+        "lgarcia": 8206,
+        "ddorssi": 8207,
+        "lechegaray": 8208,
+        "descoto": 8209,
+        "agomez": 8210,
+        "ahernandez": 8211,
+        "mllobera": 8212,
+        "fmoreira": 8213,
+        "dgarcia": 8213,
+        "bporta": 8214,
+        "aramirez": 8215,
+        "brotondo": 8216,
+        "lsaucedo": 8217,
+        "ttroya": 8218
+    };
+
+    function buscarPuerto() {
+        const input = document.getElementById("usuarioInput").value.trim().toLowerCase();
+        const divResultado = document.getElementById("resultadoPuerto");
+
+        if (usuarios[input]) {
+            divResultado.style.color = "#0369a1";
+            divResultado.innerHTML = `📌 El puerto asignado a <strong>${input}</strong> es: <span style="font-size: 1.3em; color: #d97706;">${usuarios[input]}</span>`;
+        } else if (input === "") {
+            divResultado.style.color = "#b91c1c";
+            divResultado.innerHTML = "Por favor, escribe un nombre de usuario.";
+        } else {
+            divResultado.style.color = "#b91c1c";
+            divResultado.innerHTML = "❌ Usuario no encontrado. Revisa si está bien escrito.";
+        }
+    }
+</script>
+
+</body>
+</html>
